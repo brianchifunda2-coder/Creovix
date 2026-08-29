@@ -1,12 +1,14 @@
-// J Extra Creator Hub
+// Creovix
 
 document.addEventListener("DOMContentLoaded", function () {
 
   const loginButton = document.querySelector(".login-btn");
 
-  loginButton.addEventListener("click", function () {
-    alert("Login feature coming soon!");
-  });
+  if (loginButton) {
+    loginButton.addEventListener("click", function () {
+      alert("Login feature coming soon!");
+    });
+  }
 
   const createButtons = document.querySelectorAll(".card button");
 
@@ -15,9 +17,15 @@ document.addEventListener("DOMContentLoaded", function () {
     button.addEventListener("click", function () {
 
       const card = button.closest(".card");
-      const title = card.querySelector("h3").textContent;
 
-      alert("You selected: " + title);
+      if (!card) return;
+
+      const title = card.querySelector("h3");
+
+      if (!title) return;
+
+      alert("You selected: " + title.textContent);
+
     });
 
   });
