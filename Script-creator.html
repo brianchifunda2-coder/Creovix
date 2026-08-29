@@ -3,20 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Script Creator - J Extra</title>
+
+  <title>Script Creator - CREOVIX</title>
+
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
   <header class="top-bar">
-    <div class="logo">J EXTRA</div>
+
+    <div class="logo">CREOVIX</div>
 
     <nav>
       <a href="index.html">Home</a>
       <a href="script-creator.html">Scripts</a>
     </nav>
+
   </header>
+
 
   <section class="section">
 
@@ -25,6 +30,7 @@
     <p>
       Write your story, build your scenes and save your script.
     </p>
+
 
     <div class="card">
 
@@ -35,41 +41,74 @@
         style="width:100%; padding:12px; margin-bottom:15px;"
       >
 
+
       <textarea
         id="scriptText"
         placeholder="Start writing your movie script here..."
         style="width:100%; min-height:400px; padding:15px; background:#000; color:#fff; border:1px solid #333; border-radius:8px;"
       ></textarea>
 
+
       <br><br>
 
-      <button onclick="saveScript()">Save Script</button>
+
+      <button onclick="saveScript()">
+        Save Script
+      </button>
 
     </div>
 
   </section>
 
+
   <footer>
-    <p>© 2026 J Extra Creator Hub. All rights reserved.</p>
+
+    <p>
+      © 2026 CREOVIX. All rights reserved.
+    </p>
+
   </footer>
 
+
   <script>
+
     function saveScript() {
 
-      const title = document.getElementById("scriptTitle").value;
-      const script = document.getElementById("scriptText").value;
+      const title =
+        document.getElementById("scriptTitle").value;
+
+      const script =
+        document.getElementById("scriptText").value;
+
 
       if (title === "" || script === "") {
-        alert("Please enter a title and write your script.");
+
+        alert(
+          "Please enter a title and write your script."
+        );
+
         return;
       }
 
-      localStorage.setItem("scriptTitle", title);
-      localStorage.setItem("scriptText", script);
 
-      alert("Your script has been saved!");
+      localStorage.setItem(
+        "scriptTitle",
+        title
+      );
+
+
+      localStorage.setItem(
+        "scriptText",
+        script
+      );
+
+
+      alert(
+        "Your script has been saved!"
+      );
 
     }
+
   </script>
 
 </body>
