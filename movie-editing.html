@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Editing - J Extra</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <header class="top-bar">
+    <div class="logo">J EXTRA</div>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="script-creator.html">Scripts</a>
+      <a href="speech-writer.html">Speeches</a>
+      <a href="short-clips.html">Short Clips</a>
+      <a href="movie-editing.html">Movie Editing</a>
+    </nav>
+  </header>
+
+  <section class="section">
+
+    <h2>Movie Editing</h2>
+
+    <p>
+      Organize your movie project, scenes and editing ideas
+      in one place.
+    </p>
+
+    <div class="card">
+
+      <input
+        id="movieTitle"
+        type="text"
+        placeholder="Enter your movie title"
+        style="width:100%; padding:12px; margin-bottom:15px;"
+      >
+
+      <textarea
+        id="sceneList"
+        placeholder="Write your scenes here...&#10;&#10;Scene 1: Opening&#10;Scene 2: The Journey&#10;Scene 3: The Conflict&#10;Scene 4: The Ending"
+        style="width:100%; min-height:300px; padding:15px; background:#000; color:#fff; border:1px solid #333; border-radius:8px;"
+      ></textarea>
+
+      <br><br>
+
+      <input
+        id="editingNotes"
+        type="text"
+        placeholder="Editing notes (music, transitions, effects, etc.)"
+        style="width:100%; padding:12px; margin-bottom:15px;"
+      >
+
+      <button onclick="saveMovieProject()">Save Movie Project</button>
+
+    </div>
+
+  </section>
+
+  <footer>
+    <p>© 2026 J Extra Creator Hub. All rights reserved.</p>
+  </footer>
+
+  <script>
+
+    function saveMovieProject() {
+
+      const title = document.getElementById("movieTitle").value;
+      const scenes = document.getElementById("sceneList").value;
+      const notes = document.getElementById("editingNotes").value;
+
+      if (title === "" || scenes === "") {
+        alert("Please enter a movie title and your scenes.");
+        return;
+      }
+
+      localStorage.setItem("movieTitle", title);
+      localStorage.setItem("sceneList", scenes);
+      localStorage.setItem("editingNotes", notes);
+
+      alert("Your movie project has been saved!");
+
+    }
+
+  </script>
+
+</body>
+</html>
