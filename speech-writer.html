@@ -3,21 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Speech Writer - J Extra</title>
+
+  <title>Speech Writer - Creovix</title>
+
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
   <header class="top-bar">
-    <div class="logo">J EXTRA</div>
+
+    <div class="logo">CREOVIX</div>
 
     <nav>
       <a href="index.html">Home</a>
       <a href="script-creator.html">Scripts</a>
       <a href="speech-writer.html">Speeches</a>
     </nav>
+
   </header>
+
 
   <section class="section">
 
@@ -28,6 +33,7 @@
       businesses and special occasions.
     </p>
 
+
     <div class="card">
 
       <input
@@ -37,55 +43,127 @@
         style="width:100%; padding:12px; margin-bottom:15px;"
       >
 
+
       <select
         id="speechType"
         style="width:100%; padding:12px; margin-bottom:15px;"
       >
-        <option value="">Choose speech type</option>
-        <option value="Birthday">Birthday</option>
-        <option value="Wedding">Wedding</option>
-        <option value="School">School</option>
-        <option value="Business">Business</option>
-        <option value="Motivational">Motivational</option>
-        <option value="Other">Other</option>
+
+        <option value="">
+          Choose speech type
+        </option>
+
+        <option value="Birthday">
+          Birthday
+        </option>
+
+        <option value="Wedding">
+          Wedding
+        </option>
+
+        <option value="School">
+          School
+        </option>
+
+        <option value="Business">
+          Business
+        </option>
+
+        <option value="Motivational">
+          Motivational
+        </option>
+
+        <option value="Other">
+          Other
+        </option>
+
       </select>
+
 
       <textarea
         id="speechText"
         placeholder="Start writing your speech here..."
-        style="width:100%; min-height:400px; padding:15px; background:#000; color:#fff; border:1px solid #333; border-radius:8px;"
+        style="
+          width:100%;
+          min-height:400px;
+          padding:15px;
+          background:#000;
+          color:#fff;
+          border:1px solid #333;
+          border-radius:8px;
+        "
       ></textarea>
+
 
       <br><br>
 
-      <button onclick="saveSpeech()">Save Speech</button>
+
+      <button onclick="saveSpeech()">
+        Save Speech
+      </button>
 
     </div>
 
   </section>
 
+
   <footer>
-    <p>© 2026 J Extra Creator Hub. All rights reserved.</p>
+
+    <p>
+      © 2026 Creovix.
+      All rights reserved.
+    </p>
+
   </footer>
+
 
   <script>
 
     function saveSpeech() {
 
-      const title = document.getElementById("speechTitle").value;
-      const type = document.getElementById("speechType").value;
-      const speech = document.getElementById("speechText").value;
+      const title =
+        document.getElementById("speechTitle").value;
 
-      if (title === "" || type === "" || speech === "") {
-        alert("Please enter a title, choose a speech type and write your speech.");
+      const type =
+        document.getElementById("speechType").value;
+
+      const speech =
+        document.getElementById("speechText").value;
+
+
+      if (
+        title === "" ||
+        type === "" ||
+        speech === ""
+      ) {
+
+        alert(
+          "Please enter a title, choose a speech type and write your speech."
+        );
+
         return;
       }
 
-      localStorage.setItem("speechTitle", title);
-      localStorage.setItem("speechType", type);
-      localStorage.setItem("speechText", speech);
 
-      alert("Your speech has been saved!");
+      localStorage.setItem(
+        "speechTitle",
+        title
+      );
+
+      localStorage.setItem(
+        "speechType",
+        type
+      );
+
+      localStorage.setItem(
+        "speechText",
+        speech
+      );
+
+
+      alert(
+        "Your speech has been saved!"
+      );
 
     }
 
