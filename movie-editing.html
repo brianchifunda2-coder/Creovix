@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Movie Editing - J Extra</title>
+  <title>Movie Editing - CREOVIX</title>
 
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -14,7 +14,7 @@
   <!-- TOP BAR -->
   <header class="top-bar">
 
-    <div class="logo">J EXTRA</div>
+    <div class="logo">CREOVIX</div>
 
     <nav>
       <a href="index.html">Home</a>
@@ -22,6 +22,7 @@
       <a href="speech-writer.html">Speeches</a>
       <a href="short-clips.html">Short Clips</a>
       <a href="movie-editing.html">Movie Editing</a>
+      <a href="clip-visionary.html">Clip Visionary</a>
     </nav>
 
   </header>
@@ -34,7 +35,7 @@
 
     <p>
       Build your movie scene by scene and organize your
-      editing ideas in one place.
+      editing ideas in one place with CREOVIX.
     </p>
 
 
@@ -103,7 +104,7 @@
   <footer>
 
     <p>
-      © 2026 J Extra Creator Hub.
+      © 2026 CREOVIX.
       All rights reserved.
     </p>
 
@@ -131,7 +132,8 @@
       const container =
         document.getElementById("scenesContainer");
 
-      const scene = document.createElement("div");
+      const scene =
+        document.createElement("div");
 
       scene.className = "card";
 
@@ -151,7 +153,7 @@
           class="sceneTitle"
           type="text"
           placeholder="Scene title"
-          value="${title}"
+          value="${escapeAttribute(title)}"
           style="
             width:100%;
             padding:12px;
@@ -173,14 +175,14 @@
             border-radius:8px;
             margin-bottom:12px;
           "
-        >${description}</textarea>
+        >${escapeHTML(description)}</textarea>
 
 
         <input
           class="sceneMusic"
           type="text"
           placeholder="🎵 Music / Sound"
-          value="${music}"
+          value="${escapeAttribute(music)}"
           style="
             width:100%;
             padding:12px;
@@ -193,7 +195,7 @@
           class="sceneEffects"
           type="text"
           placeholder="✨ Effects / Transitions"
-          value="${effects}"
+          value="${escapeAttribute(effects)}"
           style="
             width:100%;
             padding:12px;
@@ -270,10 +272,14 @@
     function saveMovieProject() {
 
       const title =
-        document.getElementById("movieTitle").value.trim();
+        document.getElementById(
+          "movieTitle"
+        ).value.trim();
 
       const director =
-        document.getElementById("directorName").value.trim();
+        document.getElementById(
+          "directorName"
+        ).value.trim();
 
 
       if (title === "") {
@@ -335,13 +341,13 @@
 
 
       localStorage.setItem(
-        "jExtraMovieProject",
+        "creovixMovieProject",
         JSON.stringify(project)
       );
 
 
       alert(
-        "🎬 Movie project saved successfully!"
+        "🎬 CREOVIX movie project saved successfully!"
       );
 
     }
@@ -355,14 +361,14 @@
 
       const saved =
         localStorage.getItem(
-          "jExtraMovieProject"
+          "creovixMovieProject"
         );
 
 
       if (!saved) {
 
         alert(
-          "No saved movie project found."
+          "No saved CREOVIX movie project found."
         );
 
         return;
@@ -414,8 +420,36 @@
 
 
       alert(
-        "📂 Movie project loaded!"
+        "📂 CREOVIX movie project loaded!"
       );
+
+    }
+
+
+    /* =========================================
+       SECURITY HELPERS
+       ========================================= */
+
+    function escapeHTML(text) {
+
+      const div =
+        document.createElement("div");
+
+      div.textContent =
+        text || "";
+
+      return div.innerHTML;
+
+    }
+
+
+    function escapeAttribute(text) {
+
+      return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
 
     }
 
