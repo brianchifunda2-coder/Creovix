@@ -8,6 +8,9 @@
 
   <link rel="stylesheet" href="styles.css">
 
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     .clip-card {
       background: #111;
@@ -35,18 +38,6 @@
       margin-bottom: 10px;
     }
 
-    .download-btn {
-      display: block;
-      width: 100%;
-      padding: 14px;
-      background: #00a86b;
-      color: white;
-      text-align: center;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: bold;
-    }
-
     .upload-box {
       border: 2px dashed #333;
       border-radius: 12px;
@@ -60,298 +51,418 @@
       margin-bottom: 12px;
     }
 
-    .empty-message {
-      color: #888;
-      margin-top: 20px;
+    .download-btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: #00a86b;
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      margin-top: 10px;
     }
 
-    .remove-btn {
-      background: #cc2222;
-      margin-top: 10px;
+    .status {
+      margin-top: 15px;
+      color: #aaa;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- TOP BAR -->
-  <header class="top-bar">
+<header class="top-bar">
 
-    <div class="logo">J EXTRA</div>
+  <div class="logo">J EXTRA</div>
 
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="script-creator.html">Scripts</a>
-      <a href="speech-writer.html">Speeches</a>
-      <a href="short-clips.html">Short Clips</a>
-      <a href="movie-editing.html">Movie Editing</a>
-      <a href="clip-visionary.html">Clip Visionary</a>
-    </nav>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="script-creator.html">Scripts</a>
+    <a href="speech-writer.html">Speeches</a>
+    <a href="short-clips.html">Short Clips</a>
+    <a href="movie-editing.html">Movie Editing</a>
+    <a href="clip-visionary.html">Clip Visionary</a>
+  </nav>
 
-  </header>
-
-
-  <!-- MAIN -->
-  <section class="section">
-
-    <h2>🎬 Clip Visionary</h2>
-
-    <p>
-      Free editing clips for creators.
-      Preview clips and download them for your projects.
-    </p>
+</header>
 
 
-    <!-- UPLOAD -->
-    <div class="card">
+<section class="section">
 
-      <h3>📤 Add Your Clip</h3>
+  <h2>🎬 Clip Visionary</h2>
 
-      <div class="upload-box">
+  <p>
+    Upload, discover and download free editing clips.
+  </p>
 
-        <input
-          id="clipTitle"
-          type="text"
-          placeholder="Clip title"
-        >
 
-        <input
-          id="clipCategory"
-          type="text"
-          placeholder="Category e.g. Cinematic, Comedy, Action"
-        >
+  <!-- UPLOAD -->
 
-        <input
-          id="clipFile"
-          type="file"
-          accept="video/*"
-        >
+  <div class="card">
 
-        <button onclick="addClip()">
-          ➕ Add Clip
-        </button>
+    <h3>📤 Upload a Clip</h3>
 
-      </div>
+    <div class="upload-box">
+
+      <input
+        id="clipTitle"
+        type="text"
+        placeholder="Clip title"
+      >
+
+      <input
+        id="clipCategory"
+        type="text"
+        placeholder="Category e.g. Cinematic, Action, Comedy"
+      >
+
+      <input
+        id="creatorName"
+        type="text"
+        placeholder="Your creator name"
+      >
+
+      <input
+        id="clipFile"
+        type="file"
+        accept="video/*"
+      >
+
+      <button onclick="uploadClip()">
+        📤 Upload Clip
+      </button>
+
+      <p id="status" class="status"></p>
 
     </div>
 
+  </div>
 
-    <!-- CLIPS -->
-    <div class="card">
 
-      <h3>🔥 Available Clips</h3>
+  <!-- ONLINE CLIPS -->
 
-      <div id="clipsContainer">
+  <div class="card">
 
-        <p class="empty-message">
-          No clips added yet. Add your first clip above.
+    <h3>🔥 Clip Library</h3>
+
+    <div id="clipsContainer">
+
+      <p class="status">
+        Loading clips...
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<footer>
+
+  <p>
+    © 2026 J Extra Creator Hub.
+    All rights reserved.
+  </p>
+
+</footer>
+
+
+<script>
+
+/* =========================================
+   SUPABASE CONNECTION
+   ========================================= */
+
+const SUPABASE_URL =
+  "https://sxdfwbvjohzgfaatqxqk.supabase.co";
+
+const SUPABASE_KEY =
+  "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
+
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+/* =========================================
+   UPLOAD CLIP
+   ========================================= */
+
+async function uploadClip() {
+
+  const title =
+    document.getElementById("clipTitle").value.trim();
+
+  const category =
+    document.getElementById("clipCategory").value.trim();
+
+  const creator =
+    document.getElementById("creatorName").value.trim();
+
+  const file =
+    document.getElementById("clipFile").files[0];
+
+  const status =
+    document.getElementById("status");
+
+
+  if (!title || !file) {
+
+    status.textContent =
+      "Please enter a title and choose a video.";
+
+    return;
+  }
+
+
+  if (!file.type.startsWith("video/")) {
+
+    status.textContent =
+      "Please select a video file.";
+
+    return;
+  }
+
+
+  status.textContent =
+    "Uploading clip...";
+
+
+  /* Create unique filename */
+
+  const fileName =
+    Date.now() + "-" +
+    Math.random().toString(36).substring(2) +
+    "-" +
+    file.name;
+
+
+  const filePath =
+    "uploads/" + fileName;
+
+
+  /* Upload video */
+
+  const { error: uploadError } =
+    await supabaseClient
+      .storage
+      .from("Clips")
+      .upload(
+        filePath,
+        file
+      );
+
+
+  if (uploadError) {
+
+    console.error(uploadError);
+
+    status.textContent =
+      "Upload failed: " +
+      uploadError.message;
+
+    return;
+  }
+
+
+  /* Save clip information */
+
+  const { error: databaseError } =
+    await supabaseClient
+      .from("clips")
+      .insert({
+
+        title: title,
+
+        category:
+          category || "General",
+
+        creator_name:
+          creator || "J Extra Creator",
+
+        file_path:
+          filePath
+
+      });
+
+
+  if (databaseError) {
+
+    console.error(databaseError);
+
+    status.textContent =
+      "Clip uploaded, but information could not be saved.";
+
+    return;
+  }
+
+
+  status.textContent =
+    "✅ Clip uploaded successfully!";
+
+
+  document.getElementById("clipTitle").value = "";
+
+  document.getElementById("clipCategory").value = "";
+
+  document.getElementById("creatorName").value = "";
+
+  document.getElementById("clipFile").value = "";
+
+
+  loadClips();
+
+}
+
+
+/* =========================================
+   LOAD CLIPS
+   ========================================= */
+
+async function loadClips() {
+
+  const container =
+    document.getElementById("clipsContainer");
+
+
+  container.innerHTML =
+    "<p class='status'>Loading clips...</p>";
+
+
+  const { data, error } =
+    await supabaseClient
+      .from("clips")
+      .select("*")
+      .order(
+        "created_at",
+        {
+          ascending: false
+        }
+      );
+
+
+  if (error) {
+
+    console.error(error);
+
+    container.innerHTML =
+      "<p class='status'>Unable to load clips.</p>";
+
+    return;
+  }
+
+
+  if (!data || data.length === 0) {
+
+    container.innerHTML =
+      "<p class='status'>No clips uploaded yet.</p>";
+
+    return;
+  }
+
+
+  container.innerHTML = "";
+
+
+  data.forEach(clip => {
+
+    const { data: publicData } =
+      supabaseClient
+        .storage
+        .from("Clips")
+        .getPublicUrl(
+          clip.file_path
+        );
+
+
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "clip-card";
+
+
+    card.innerHTML = `
+
+      <div class="clip-info">
+
+        <h3>
+          🎥 ${escapeHTML(clip.title)}
+        </h3>
+
+        <p>
+          Category:
+          ${escapeHTML(
+            clip.category || "General"
+          )}
+        </p>
+
+        <p>
+          Creator:
+          ${escapeHTML(
+            clip.creator_name || "J Extra Creator"
+          )}
         </p>
 
       </div>
 
-    </div>
 
-  </section>
+      <video
+        controls
+        preload="metadata"
+        src="${publicData.publicUrl}"
+      ></video>
 
 
-  <!-- FOOTER -->
-  <footer>
+      <a
+        class="download-btn"
+        href="${publicData.publicUrl}"
+        download
+        target="_blank"
+      >
+        ⬇️ Download Clip
+      </a>
 
-    <p>
-      © 2026 J Extra Creator Hub.
-      All rights reserved.
-    </p>
+    `;
 
-  </footer>
 
+    container.appendChild(card);
 
-  <script>
+  });
 
-    let clips = [];
+}
 
 
-    /* ================================
-       ADD CLIP
-       ================================ */
+/* =========================================
+   SECURITY
+   ========================================= */
 
-    function addClip() {
+function escapeHTML(text) {
 
-      const title =
-        document.getElementById("clipTitle").value.trim();
+  const div =
+    document.createElement("div");
 
-      const category =
-        document.getElementById("clipCategory").value.trim();
+  div.textContent =
+    text;
 
-      const fileInput =
-        document.getElementById("clipFile");
+  return div.innerHTML;
 
-      const file =
-        fileInput.files[0];
+}
 
 
-      if (!title || !file) {
+/* =========================================
+   START
+   ========================================= */
 
-        alert("Please enter a clip title and choose a video.");
+loadClips();
 
-        return;
-
-      }
-
-
-      if (!file.type.startsWith("video/")) {
-
-        alert("Please choose a video file.");
-
-        return;
-
-      }
-
-
-      const videoURL =
-        URL.createObjectURL(file);
-
-
-      const clip = {
-
-        title: title,
-
-        category: category || "General",
-
-        url: videoURL,
-
-        fileName: file.name
-
-      };
-
-
-      clips.push(clip);
-
-      displayClips();
-
-
-      document.getElementById("clipTitle").value = "";
-
-      document.getElementById("clipCategory").value = "";
-
-      fileInput.value = "";
-
-    }
-
-
-    /* ================================
-       DISPLAY CLIPS
-       ================================ */
-
-    function displayClips() {
-
-      const container =
-        document.getElementById("clipsContainer");
-
-
-      container.innerHTML = "";
-
-
-      if (clips.length === 0) {
-
-        container.innerHTML = `
-          <p class="empty-message">
-            No clips added yet.
-          </p>
-        `;
-
-        return;
-
-      }
-
-
-      clips.forEach((clip, index) => {
-
-        const card =
-          document.createElement("div");
-
-        card.className = "clip-card";
-
-
-        card.innerHTML = `
-
-          <div class="clip-info">
-
-            <h3>
-              🎥 ${escapeHTML(clip.title)}
-            </h3>
-
-            <p>
-              Category: ${escapeHTML(clip.category)}
-            </p>
-
-          </div>
-
-
-          <video
-            controls
-            src="${clip.url}"
-          ></video>
-
-
-          <a
-            class="download-btn"
-            href="${clip.url}"
-            download="${escapeHTML(clip.fileName)}"
-          >
-            ⬇️ Download Clip
-          </a>
-
-
-          <button
-            class="remove-btn"
-            onclick="removeClip(${index})"
-          >
-            🗑️ Remove Clip
-          </button>
-
-        `;
-
-
-        container.appendChild(card);
-
-      });
-
-    }
-
-
-    /* ================================
-       REMOVE CLIP
-       ================================ */
-
-    function removeClip(index) {
-
-      URL.revokeObjectURL(
-        clips[index].url
-      );
-
-      clips.splice(index, 1);
-
-      displayClips();
-
-    }
-
-
-    /* ================================
-       SECURITY
-       ================================ */
-
-    function escapeHTML(text) {
-
-      const div =
-        document.createElement("div");
-
-      div.textContent = text;
-
-      return div.innerHTML;
-
-    }
-
-  </script>
+</script>
 
 </body>
 </html>
