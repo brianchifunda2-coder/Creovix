@@ -3,14 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Short Clips - J Extra</title>
+
+  <title>Short Clips - Creovix</title>
+
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
   <header class="top-bar">
-    <div class="logo">J EXTRA</div>
+
+    <div class="logo">CREOVIX</div>
 
     <nav>
       <a href="index.html">Home</a>
@@ -18,7 +21,9 @@
       <a href="speech-writer.html">Speeches</a>
       <a href="short-clips.html">Short Clips</a>
     </nav>
+
   </header>
+
 
   <section class="section">
 
@@ -29,6 +34,7 @@
       and other short-form videos.
     </p>
 
+
     <div class="card">
 
       <input
@@ -38,55 +44,127 @@
         style="width:100%; padding:12px; margin-bottom:15px;"
       >
 
+
       <select
         id="clipType"
         style="width:100%; padding:12px; margin-bottom:15px;"
       >
-        <option value="">Choose clip type</option>
-        <option value="Music">Music</option>
-        <option value="Comedy">Comedy</option>
-        <option value="Motivation">Motivation</option>
-        <option value="Story">Story</option>
-        <option value="Advertisement">Advertisement</option>
-        <option value="Other">Other</option>
+
+        <option value="">
+          Choose clip type
+        </option>
+
+        <option value="Music">
+          Music
+        </option>
+
+        <option value="Comedy">
+          Comedy
+        </option>
+
+        <option value="Motivation">
+          Motivation
+        </option>
+
+        <option value="Story">
+          Story
+        </option>
+
+        <option value="Advertisement">
+          Advertisement
+        </option>
+
+        <option value="Other">
+          Other
+        </option>
+
       </select>
+
 
       <textarea
         id="clipIdea"
         placeholder="Describe your short clip idea..."
-        style="width:100%; min-height:250px; padding:15px; background:#000; color:#fff; border:1px solid #333; border-radius:8px;"
+        style="
+          width:100%;
+          min-height:250px;
+          padding:15px;
+          background:#000;
+          color:#fff;
+          border:1px solid #333;
+          border-radius:8px;
+        "
       ></textarea>
+
 
       <br><br>
 
-      <button onclick="saveClip()">Save Clip Idea</button>
+
+      <button onclick="saveClip()">
+        Save Clip Idea
+      </button>
 
     </div>
 
   </section>
 
+
   <footer>
-    <p>© 2026 J Extra Creator Hub. All rights reserved.</p>
+
+    <p>
+      © 2026 Creovix.
+      All rights reserved.
+    </p>
+
   </footer>
+
 
   <script>
 
     function saveClip() {
 
-      const title = document.getElementById("clipTitle").value;
-      const type = document.getElementById("clipType").value;
-      const idea = document.getElementById("clipIdea").value;
+      const title =
+        document.getElementById("clipTitle").value;
 
-      if (title === "" || type === "" || idea === "") {
-        alert("Please enter a title, choose a clip type and describe your idea.");
+      const type =
+        document.getElementById("clipType").value;
+
+      const idea =
+        document.getElementById("clipIdea").value;
+
+
+      if (
+        title === "" ||
+        type === "" ||
+        idea === ""
+      ) {
+
+        alert(
+          "Please enter a title, choose a clip type and describe your idea."
+        );
+
         return;
       }
 
-      localStorage.setItem("clipTitle", title);
-      localStorage.setItem("clipType", type);
-      localStorage.setItem("clipIdea", idea);
 
-      alert("Your clip idea has been saved!");
+      localStorage.setItem(
+        "clipTitle",
+        title
+      );
+
+      localStorage.setItem(
+        "clipType",
+        type
+      );
+
+      localStorage.setItem(
+        "clipIdea",
+        idea
+      );
+
+
+      alert(
+        "Your clip idea has been saved!"
+      );
 
     }
 
