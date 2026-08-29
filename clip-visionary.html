@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-const SUPABASE_KEY =
-  "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
   <title>Clip Visionary - J Extra</title>
 
   <link rel="stylesheet" href="styles.css">
@@ -143,7 +141,7 @@ const SUPABASE_KEY =
   </div>
 
 
-  <!-- ONLINE CLIPS -->
+  <!-- CLIP LIBRARY -->
 
   <div class="card">
 
@@ -181,6 +179,14 @@ const SUPABASE_KEY =
 const SUPABASE_URL =
   "https://sxdfwbvjohzgfaatqxqk.supabase.co";
 
+/*
+   IMPORTANT:
+   Replace the text below with your
+   sb_publishable_... key.
+   
+   DO NOT use your sb_secret_... key.
+*/
+
 const SUPABASE_KEY =
   "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
 
@@ -207,17 +213,29 @@ async function uploadClip() {
   const creator =
     document.getElementById("creatorName").value.trim();
 
+  const fileInput =
+    document.getElementById("clipFile");
+
   const file =
-    document.getElementById("clipFile").files[0];
+    fileInput.files[0];
 
   const status =
     document.getElementById("status");
 
 
-  if (!title || !file) {
+  if (!title) {
 
     status.textContent =
-      "Please enter a title and choose a video.";
+      "Please enter a clip title.";
+
+    return;
+  }
+
+
+  if (!file) {
+
+    status.textContent =
+      "Please choose a video.";
 
     return;
   }
@@ -226,99 +244,121 @@ async function uploadClip() {
   if (!file.type.startsWith("video/")) {
 
     status.textContent =
-      "Please select a video file.";
+      "Please choose a video file.";
 
     return;
   }
 
 
   status.textContent =
-    "Uploading clip...";
+    "⏳ Uploading your clip...";
 
 
-  /* Create unique filename */
+  try {
 
-  const fileName =
-    Date.now() + "-" +
-    Math.random().toString(36).substring(2) +
-    "-" +
-    file.name;
+    /* Create a unique file name */
 
-
-  const filePath =
-    "uploads/" + fileName;
-
-
-  /* Upload video */
-
-  const { error: uploadError } =
-    await supabaseClient
-      .storage
-      .from("Clips")
-      .upload(
-        filePath,
-        file
+    const safeName =
+      file.name.replace(
+        /[^a-zA-Z0-9._-]/g,
+        "_"
       );
 
 
-  if (uploadError) {
+    const filePath =
+      "uploads/" +
+      Date.now() +
+      "-" +
+      Math.random()
+        .toString(36)
+        .substring(2) +
+      "-" +
+      safeName;
 
-    console.error(uploadError);
+
+    /* Upload video to Storage */
+
+    const { error: uploadError } =
+      await supabaseClient
+        .storage
+        .from("Clips")
+        .upload(
+          filePath,
+          file
+        );
+
+
+    if (uploadError) {
+
+      throw uploadError;
+
+    }
+
+
+    /* Save information in database */
+
+    const { error: databaseError } =
+      await supabaseClient
+        .from("clips")
+        .insert({
+
+          title: title,
+
+          category:
+            category || "General",
+
+          creator_name:
+            creator || "J Extra Creator",
+
+          file_path:
+            filePath
+
+        });
+
+
+    if (databaseError) {
+
+      throw databaseError;
+
+    }
+
 
     status.textContent =
-      "Upload failed: " +
-      uploadError.message;
+      "✅ Clip uploaded successfully!";
 
-    return;
+
+    /* Clear form */
+
+    document.getElementById(
+      "clipTitle"
+    ).value = "";
+
+    document.getElementById(
+      "clipCategory"
+    ).value = "";
+
+    document.getElementById(
+      "creatorName"
+    ).value = "";
+
+    fileInput.value = "";
+
+
+    /* Refresh library */
+
+    loadClips();
+
   }
 
+  catch (error) {
 
-  /* Save clip information */
-
-  const { error: databaseError } =
-    await supabaseClient
-      .from("clips")
-      .insert({
-
-        title: title,
-
-        category:
-          category || "General",
-
-        creator_name:
-          creator || "J Extra Creator",
-
-        file_path:
-          filePath
-
-      });
-
-
-  if (databaseError) {
-
-    console.error(databaseError);
+    console.error(error);
 
     status.textContent =
-      "Clip uploaded, but information could not be saved.";
+      "❌ Upload failed: " +
+      error.message;
 
-    return;
   }
-
-
-  status.textContent =
-    "✅ Clip uploaded successfully!";
-
-
-  document.getElementById("clipTitle").value = "";
-
-  document.getElementById("clipCategory").value = "";
-
-  document.getElementById("creatorName").value = "";
-
-  document.getElementById("clipFile").value = "";
-
-
-  loadClips();
 
 }
 
@@ -330,11 +370,13 @@ async function uploadClip() {
 async function loadClips() {
 
   const container =
-    document.getElementById("clipsContainer");
+    document.getElementById(
+      "clipsContainer"
+    );
 
 
   container.innerHTML =
-    "<p class='status'>Loading clips...</p>";
+    "<p class='status'>⏳ Loading clips...</p>";
 
 
   const { data, error } =
@@ -354,7 +396,7 @@ async function loadClips() {
     console.error(error);
 
     container.innerHTML =
-      "<p class='status'>Unable to load clips.</p>";
+      "<p class='status'>❌ Unable to load clips.</p>";
 
     return;
   }
@@ -374,13 +416,15 @@ async function loadClips() {
 
   data.forEach(clip => {
 
-    const { data: publicData } =
+    const publicURL =
       supabaseClient
         .storage
         .from("Clips")
         .getPublicUrl(
           clip.file_path
-        );
+        )
+        .data
+        .publicUrl;
 
 
     const card =
@@ -390,43 +434,51 @@ async function loadClips() {
       "clip-card";
 
 
+    const title =
+      escapeHTML(
+        clip.title
+      );
+
+    const category =
+      escapeHTML(
+        clip.category || "General"
+      );
+
+    const creator =
+      escapeHTML(
+        clip.creator_name ||
+        "J Extra Creator"
+      );
+
+
     card.innerHTML = `
 
       <div class="clip-info">
 
         <h3>
-          🎥 ${escapeHTML(clip.title)}
+          🎥 ${title}
         </h3>
 
         <p>
-          Category:
-          ${escapeHTML(
-            clip.category || "General"
-          )}
+          Category: ${category}
         </p>
 
         <p>
-          Creator:
-          ${escapeHTML(
-            clip.creator_name || "J Extra Creator"
-          )}
+          Creator: ${creator}
         </p>
 
       </div>
 
-
       <video
         controls
         preload="metadata"
-        src="${publicData.publicUrl}"
+        src="${publicURL}"
       ></video>
-
 
       <a
         class="download-btn"
-        href="${publicData.publicUrl}"
+        href="${publicURL}"
         download
-        target="_blank"
       >
         ⬇️ Download Clip
       </a>
