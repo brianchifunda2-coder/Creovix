@@ -3,13 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Movie Editing - J Extra</title>
+
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
+  <!-- TOP BAR -->
   <header class="top-bar">
+
     <div class="logo">J EXTRA</div>
 
     <nav>
@@ -19,18 +23,27 @@
       <a href="short-clips.html">Short Clips</a>
       <a href="movie-editing.html">Movie Editing</a>
     </nav>
+
   </header>
 
+
+  <!-- MAIN -->
   <section class="section">
 
-    <h2>Movie Editing</h2>
+    <h2>🎬 Movie Editing</h2>
 
     <p>
-      Organize your movie project, scenes and editing ideas
-      in one place.
+      Build your movie scene by scene and organize your
+      editing ideas in one place.
     </p>
 
+
+    <!-- MOVIE INFORMATION -->
     <div class="card">
+
+      <h3 style="margin-bottom:20px;">
+        🎥 Movie Project
+      </h3>
 
       <input
         id="movieTitle"
@@ -39,51 +52,379 @@
         style="width:100%; padding:12px; margin-bottom:15px;"
       >
 
-      <textarea
-        id="sceneList"
-        placeholder="Write your scenes here...&#10;&#10;Scene 1: Opening&#10;Scene 2: The Journey&#10;Scene 3: The Conflict&#10;Scene 4: The Ending"
-        style="width:100%; min-height:300px; padding:15px; background:#000; color:#fff; border:1px solid #333; border-radius:8px;"
-      ></textarea>
-
-      <br><br>
-
       <input
-        id="editingNotes"
+        id="directorName"
         type="text"
-        placeholder="Editing notes (music, transitions, effects, etc.)"
-        style="width:100%; padding:12px; margin-bottom:15px;"
+        placeholder="Director / Creator name"
+        style="width:100%; padding:12px; margin-bottom:25px;"
       >
 
-      <button onclick="saveMovieProject()">Save Movie Project</button>
+
+      <!-- SCENES -->
+      <h3 style="margin-bottom:15px;">
+        🎞️ Movie Scenes
+      </h3>
+
+      <div id="scenesContainer"></div>
+
+
+      <!-- ADD SCENE -->
+      <button
+        onclick="addScene()"
+        style="margin-top:20px;"
+      >
+        ➕ Add New Scene
+      </button>
+
+
+      <!-- SAVE -->
+      <button
+        onclick="saveMovieProject()"
+        style="margin-top:15px; background:#00a86b;"
+      >
+        💾 Save Movie Project
+      </button>
+
+
+      <!-- LOAD -->
+      <button
+        onclick="loadMovieProject()"
+        style="margin-top:15px; background:#444;"
+      >
+        📂 Load Saved Project
+      </button>
 
     </div>
 
   </section>
 
+
+  <!-- FOOTER -->
   <footer>
-    <p>© 2026 J Extra Creator Hub. All rights reserved.</p>
+
+    <p>
+      © 2026 J Extra Creator Hub.
+      All rights reserved.
+    </p>
+
   </footer>
+
 
   <script>
 
-    function saveMovieProject() {
+    let sceneNumber = 0;
 
-      const title = document.getElementById("movieTitle").value;
-      const scenes = document.getElementById("sceneList").value;
-      const notes = document.getElementById("editingNotes").value;
 
-      if (title === "" || scenes === "") {
-        alert("Please enter a movie title and your scenes.");
-        return;
-      }
+    /* =========================================
+       ADD NEW SCENE
+       ========================================= */
 
-      localStorage.setItem("movieTitle", title);
-      localStorage.setItem("sceneList", scenes);
-      localStorage.setItem("editingNotes", notes);
+    function addScene(
+      title = "",
+      description = "",
+      music = "",
+      effects = ""
+    ) {
 
-      alert("Your movie project has been saved!");
+      sceneNumber++;
+
+      const container =
+        document.getElementById("scenesContainer");
+
+      const scene = document.createElement("div");
+
+      scene.className = "card";
+
+      scene.style.marginBottom = "20px";
+      scene.style.textAlign = "left";
+      scene.style.background = "#111";
+
+
+      scene.innerHTML = `
+
+        <h3 style="margin-bottom:20px;">
+          🎬 Scene ${sceneNumber}
+        </h3>
+
+
+        <input
+          class="sceneTitle"
+          type="text"
+          placeholder="Scene title"
+          value="${title}"
+          style="
+            width:100%;
+            padding:12px;
+            margin-bottom:12px;
+          "
+        >
+
+
+        <textarea
+          class="sceneDescription"
+          placeholder="Describe what happens in this scene..."
+          style="
+            width:100%;
+            min-height:120px;
+            padding:12px;
+            background:#000;
+            color:#fff;
+            border:1px solid #333;
+            border-radius:8px;
+            margin-bottom:12px;
+          "
+        >${description}</textarea>
+
+
+        <input
+          class="sceneMusic"
+          type="text"
+          placeholder="🎵 Music / Sound"
+          value="${music}"
+          style="
+            width:100%;
+            padding:12px;
+            margin-bottom:12px;
+          "
+        >
+
+
+        <input
+          class="sceneEffects"
+          type="text"
+          placeholder="✨ Effects / Transitions"
+          value="${effects}"
+          style="
+            width:100%;
+            padding:12px;
+            margin-bottom:15px;
+          "
+        >
+
+
+        <button
+          onclick="deleteScene(this)"
+          style="
+            background:#cc2222;
+          "
+        >
+          🗑️ Delete Scene
+        </button>
+
+      `;
+
+
+      container.appendChild(scene);
 
     }
+
+
+    /* =========================================
+       DELETE SCENE
+       ========================================= */
+
+    function deleteScene(button) {
+
+      const scene =
+        button.parentElement;
+
+      scene.remove();
+
+      renumberScenes();
+
+    }
+
+
+    /* =========================================
+       RENUMBER SCENES
+       ========================================= */
+
+    function renumberScenes() {
+
+      const scenes =
+        document.querySelectorAll(
+          "#scenesContainer > .card"
+        );
+
+      sceneNumber = 0;
+
+      scenes.forEach(scene => {
+
+        sceneNumber++;
+
+        const heading =
+          scene.querySelector("h3");
+
+        heading.textContent =
+          "🎬 Scene " + sceneNumber;
+
+      });
+
+    }
+
+
+    /* =========================================
+       SAVE PROJECT
+       ========================================= */
+
+    function saveMovieProject() {
+
+      const title =
+        document.getElementById("movieTitle").value.trim();
+
+      const director =
+        document.getElementById("directorName").value.trim();
+
+
+      if (title === "") {
+
+        alert(
+          "Please enter your movie title."
+        );
+
+        return;
+
+      }
+
+
+      const scenes = [];
+
+
+      document
+        .querySelectorAll(
+          "#scenesContainer > .card"
+        )
+        .forEach(scene => {
+
+          scenes.push({
+
+            title:
+              scene.querySelector(
+                ".sceneTitle"
+              ).value,
+
+            description:
+              scene.querySelector(
+                ".sceneDescription"
+              ).value,
+
+            music:
+              scene.querySelector(
+                ".sceneMusic"
+              ).value,
+
+            effects:
+              scene.querySelector(
+                ".sceneEffects"
+              ).value
+
+          });
+
+        });
+
+
+      const project = {
+
+        movieTitle: title,
+
+        director: director,
+
+        scenes: scenes
+
+      };
+
+
+      localStorage.setItem(
+        "jExtraMovieProject",
+        JSON.stringify(project)
+      );
+
+
+      alert(
+        "🎬 Movie project saved successfully!"
+      );
+
+    }
+
+
+    /* =========================================
+       LOAD PROJECT
+       ========================================= */
+
+    function loadMovieProject() {
+
+      const saved =
+        localStorage.getItem(
+          "jExtraMovieProject"
+        );
+
+
+      if (!saved) {
+
+        alert(
+          "No saved movie project found."
+        );
+
+        return;
+
+      }
+
+
+      const project =
+        JSON.parse(saved);
+
+
+      document.getElementById(
+        "movieTitle"
+      ).value =
+        project.movieTitle || "";
+
+
+      document.getElementById(
+        "directorName"
+      ).value =
+        project.director || "";
+
+
+      const container =
+        document.getElementById(
+          "scenesContainer"
+        );
+
+
+      container.innerHTML = "";
+
+      sceneNumber = 0;
+
+
+      if (project.scenes) {
+
+        project.scenes.forEach(scene => {
+
+          addScene(
+            scene.title,
+            scene.description,
+            scene.music,
+            scene.effects
+          );
+
+        });
+
+      }
+
+
+      alert(
+        "📂 Movie project loaded!"
+      );
+
+    }
+
+
+    /* =========================================
+       START WITH ONE SCENE
+       ========================================= */
+
+    addScene();
 
   </script>
 
