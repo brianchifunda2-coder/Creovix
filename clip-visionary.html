@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Clip Visionary - J Extra</title>
+  <title>Clip Visionary - CREOVIX</title>
 
   <link rel="stylesheet" href="styles.css">
 
@@ -83,7 +83,7 @@
 
 <header class="top-bar">
 
-  <div class="logo">J EXTRA</div>
+  <div class="logo">CREOVIX</div>
 
   <nav>
     <a href="index.html">Home</a>
@@ -102,7 +102,7 @@
   <h2>🎬 Clip Visionary</h2>
 
   <p>
-    Upload, discover and download free editing clips.
+    Upload, discover and download free editing clips on CREOVIX.
   </p>
 
 
@@ -174,8 +174,7 @@
 <footer>
 
   <p>
-    © 2026 J Extra Creator Hub.
-    All rights reserved.
+    © 2026 CREOVIX. All rights reserved.
   </p>
 
 </footer>
@@ -298,7 +297,7 @@ async function uploadClip() {
     }
 
 
-    /* Save clip information */
+    /* Save information in database */
 
     const { error: databaseError } =
       await supabaseClient
@@ -311,7 +310,7 @@ async function uploadClip() {
             category || "General",
 
           creator_name:
-            creator || "J Extra Creator",
+            creator || "CREOVIX Creator",
 
           file_path:
             filePath
@@ -456,7 +455,7 @@ async function loadClips() {
     const creator =
       escapeHTML(
         clip.creator_name ||
-        "J Extra Creator"
+        "CREOVIX Creator"
       );
 
 
