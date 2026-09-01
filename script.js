@@ -1,33 +1,112 @@
-// Creovix
+/* =========================================
+   CREOVIX
+   Main Website JavaScript
+   ========================================= */
 
 document.addEventListener("DOMContentLoaded", function () {
+
+  /* =========================================
+     LOGIN
+     ========================================= */
 
   const loginButton = document.querySelector(".login-btn");
 
   if (loginButton) {
+
     loginButton.addEventListener("click", function () {
-      alert("Login feature coming soon!");
+
+      window.location.href = "login.html";
+
     });
+
   }
 
-  const createButtons = document.querySelectorAll(".card button");
 
-  createButtons.forEach(function (button) {
+  /* =========================================
+     SMOOTH NAVIGATION
+     ========================================= */
 
-    button.addEventListener("click", function () {
+  const navigationLinks = document.querySelectorAll(
+    'nav a[href^="#"], .hero a[href^="#"]'
+  );
 
-      const card = button.closest(".card");
+  navigationLinks.forEach(function (link) {
 
-      if (!card) return;
+    link.addEventListener("click", function (event) {
 
-      const title = card.querySelector("h3");
+      const targetId = link.getAttribute("href");
 
-      if (!title) return;
+      if (!targetId || targetId === "#") return;
 
-      alert("You selected: " + title.textContent);
+      const target = document.querySelector(targetId);
+
+      if (!target) return;
+
+      event.preventDefault();
+
+      target.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
 
     });
 
   });
+
+
+  /* =========================================
+     CREATION BUTTONS
+     ========================================= */
+
+  const creationLinks = document.querySelectorAll(
+    ".card .primary-btn"
+  );
+
+  creationLinks.forEach(function (link) {
+
+    link.addEventListener("click", function () {
+
+      const destination = link.getAttribute("href");
+
+      if (!destination) return;
+
+      console.log(
+        "CREOVIX Creator Tool:",
+        destination
+      );
+
+    });
+
+  });
+
+
+  /* =========================================
+     HERO BUTTON FEEDBACK
+     ========================================= */
+
+  const startCreating = document.querySelector(
+    '.hero .primary-btn'
+  );
+
+  if (startCreating) {
+
+    startCreating.addEventListener("click", function () {
+
+      console.log(
+        "CREOVIX: Creator tools opened."
+      );
+
+    });
+
+  }
+
+
+  /* =========================================
+     CREOVIX STARTUP MESSAGE
+     ========================================= */
+
+  console.log(
+    "CREOVIX Creator Platform loaded successfully."
+  );
 
 });
