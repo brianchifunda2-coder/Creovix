@@ -1,65 +1,398 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Script Creator - CREOVIX</title>
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Script Studio - CREOVIX</title>
 
   <link rel="stylesheet" href="styles.css">
+
+  <style>
+
+    .studio-card {
+      max-width: 1000px;
+      margin: 30px auto;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 13px;
+      border-radius: 8px;
+      border: 1px solid #333;
+      background: #111;
+      color: #ffffff;
+    }
+
+    .form-group textarea {
+      min-height: 180px;
+    }
+
+    .character-row {
+      display: grid;
+      grid-template-columns: 1fr 2fr auto;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .character-row input {
+      padding: 12px;
+      background: #111;
+      color: #fff;
+      border: 1px solid #333;
+      border-radius: 8px;
+    }
+
+    .remove-character {
+      width: auto;
+      padding: 10px 15px;
+      background: #333;
+    }
+
+    .remove-character:hover {
+      background: #aa2222;
+    }
+
+    .tool-buttons {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 25px;
+    }
+
+    .tool-buttons button {
+      width: 100%;
+    }
+
+    .secondary-action {
+      background: #151515;
+      border: 1px solid #333;
+    }
+
+    .secondary-action:hover {
+      background: #222;
+    }
+
+    .script-output {
+      margin-top: 30px;
+      padding: 25px;
+
+      background: #000;
+
+      border: 1px solid #333;
+      border-radius: 10px;
+
+      text-align: left;
+
+      white-space: pre-wrap;
+
+      min-height: 250px;
+
+      color: #eeeeee;
+    }
+
+    .status {
+      margin-top: 15px;
+      color: #00aaff;
+      font-weight: bold;
+    }
+
+    @media (max-width: 650px) {
+
+      .character-row {
+        grid-template-columns: 1fr;
+      }
+
+      .remove-character {
+        width: 100%;
+      }
+
+      .tool-buttons {
+        grid-template-columns: 1fr;
+      }
+
+    }
+
+  </style>
+
 </head>
+
 
 <body>
 
+
+  <!-- HEADER -->
+
   <header class="top-bar">
 
-    <div class="logo">CREOVIX</div>
+    <div class="logo">
+      CREOVIX
+    </div>
 
     <nav>
-      <a href="index.html">Home</a>
-      <a href="script-creator.html">Scripts</a>
+
+      <a href="index.html">
+        Home
+      </a>
+
+      <a href="script-creator.html">
+        Scripts
+      </a>
+
     </nav>
 
   </header>
 
 
+  <!-- SCRIPT STUDIO -->
+
   <section class="section">
 
-    <h2>Movie Script Creator</h2>
+    <h2>
+      🎬 Script Studio
+    </h2>
 
     <p>
-      Write your story, build your scenes and save your script.
+      Turn your movie idea into a structured script project.
     </p>
 
 
-    <div class="card">
-
-      <input
-        id="scriptTitle"
-        type="text"
-        placeholder="Enter your script title"
-        style="width:100%; padding:12px; margin-bottom:15px;"
-      >
+    <div class="card studio-card">
 
 
-      <textarea
-        id="scriptText"
-        placeholder="Start writing your movie script here..."
-        style="width:100%; min-height:400px; padding:15px; background:#000; color:#fff; border:1px solid #333; border-radius:8px;"
-      ></textarea>
+      <!-- TITLE -->
+
+      <div class="form-group">
+
+        <label for="scriptTitle">
+          Movie / Script Title
+        </label>
+
+        <input
+          id="scriptTitle"
+          type="text"
+          placeholder="Example: From The Trenches"
+        >
+
+      </div>
 
 
-      <br><br>
+      <!-- GENRE -->
+
+      <div class="form-group">
+
+        <label for="genre">
+          Genre
+        </label>
+
+        <select id="genre">
+
+          <option value="">
+            Select a genre
+          </option>
+
+          <option>
+            Action
+          </option>
+
+          <option>
+            Drama
+          </option>
+
+          <option>
+            Comedy
+          </option>
+
+          <option>
+            Romance
+          </option>
+
+          <option>
+            Thriller
+          </option>
+
+          <option>
+            Horror
+          </option>
+
+          <option>
+            Adventure
+          </option>
+
+          <option>
+            Sci-Fi
+          </option>
+
+        </select>
+
+      </div>
 
 
-      <button onclick="saveScript()">
-        Save Script
-      </button>
+      <!-- STORY IDEA -->
+
+      <div class="form-group">
+
+        <label for="storyIdea">
+          Story Idea
+        </label>
+
+        <textarea
+          id="storyIdea"
+          placeholder="Describe your movie idea, characters, conflict and what happens in the story..."
+        ></textarea>
+
+      </div>
+
+
+      <!-- CHARACTERS -->
+
+      <div class="form-group">
+
+        <label>
+          Characters
+        </label>
+
+
+        <div id="characters">
+
+          <div class="character-row">
+
+            <input
+              type="text"
+              placeholder="Character name"
+              class="character-name"
+            >
+
+            <input
+              type="text"
+              placeholder="Character description"
+              class="character-description"
+            >
+
+            <button
+              type="button"
+              class="remove-character"
+              onclick="removeCharacter(this)"
+            >
+              Remove
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="secondary-action"
+          onclick="addCharacter()"
+        >
+          + Add Character
+        </button>
+
+      </div>
+
+
+      <!-- SCRIPT -->
+
+      <div class="form-group">
+
+        <label for="scriptText">
+          Your Script
+        </label>
+
+        <textarea
+          id="scriptText"
+          placeholder="Write your scenes, dialogue and action here..."
+          style="min-height:400px;"
+        ></textarea>
+
+      </div>
+
+
+      <!-- ACTIONS -->
+
+      <div class="tool-buttons">
+
+        <button
+          type="button"
+          onclick="saveScript()"
+        >
+          💾 Save
+        </button>
+
+
+        <button
+          type="button"
+          class="secondary-action"
+          onclick="generateTemplate()"
+        >
+          ✨ Build Template
+        </button>
+
+
+        <button
+          type="button"
+          class="secondary-action"
+          onclick="downloadScript()"
+        >
+          📥 Download
+        </button>
+
+      </div>
+
+
+      <div
+        id="status"
+        class="status"
+      ></div>
+
 
     </div>
 
+
+    <!-- SCRIPT PREVIEW -->
+
+    <div class="card studio-card">
+
+      <h3>
+        Script Preview
+      </h3>
+
+      <div
+        id="scriptPreview"
+        class="script-output"
+      >
+        Your saved script preview will appear here.
+      </div>
+
+    </div>
+
+
   </section>
 
+
+  <!-- FOOTER -->
 
   <footer>
 
@@ -72,44 +405,508 @@
 
   <script>
 
-    function saveScript() {
+    /* =========================================
+       ADD CHARACTER
+       ========================================= */
 
-      const title =
-        document.getElementById("scriptTitle").value;
+    function addCharacter() {
 
-      const script =
-        document.getElementById("scriptText").value;
+      const container =
+        document.getElementById("characters");
+
+      const row =
+        document.createElement("div");
+
+      row.className =
+        "character-row";
+
+      row.innerHTML = `
+
+        <input
+          type="text"
+          placeholder="Character name"
+          class="character-name"
+        >
+
+        <input
+          type="text"
+          placeholder="Character description"
+          class="character-description"
+        >
+
+        <button
+          type="button"
+          class="remove-character"
+          onclick="removeCharacter(this)"
+        >
+          Remove
+        </button>
+
+      `;
+
+      container.appendChild(row);
+
+    }
 
 
-      if (title === "" || script === "") {
+    /* =========================================
+       REMOVE CHARACTER
+       ========================================= */
+
+    function removeCharacter(button) {
+
+      const rows =
+        document.querySelectorAll(".character-row");
+
+      if (rows.length <= 1) {
 
         alert(
-          "Please enter a title and write your script."
+          "You need at least one character."
         );
 
         return;
+
+      }
+
+      button
+        .parentElement
+        .remove();
+
+    }
+
+
+    /* =========================================
+       GET CHARACTERS
+       ========================================= */
+
+    function getCharacters() {
+
+      const rows =
+        document.querySelectorAll(".character-row");
+
+      const characters = [];
+
+      rows.forEach(function(row) {
+
+        const name =
+          row
+            .querySelector(".character-name")
+            .value
+            .trim();
+
+        const description =
+          row
+            .querySelector(".character-description")
+            .value
+            .trim();
+
+        if (name !== "") {
+
+          characters.push({
+            name: name,
+            description: description
+          });
+
+        }
+
+      });
+
+      return characters;
+
+    }
+
+
+    /* =========================================
+       SAVE SCRIPT
+       ========================================= */
+
+    function saveScript() {
+
+      const title =
+        document
+          .getElementById("scriptTitle")
+          .value
+          .trim();
+
+      const genre =
+        document
+          .getElementById("genre")
+          .value;
+
+      const story =
+        document
+          .getElementById("storyIdea")
+          .value
+          .trim();
+
+      const script =
+        document
+          .getElementById("scriptText")
+          .value
+          .trim();
+
+      const characters =
+        getCharacters();
+
+
+      if (
+        title === "" ||
+        story === "" ||
+        script === ""
+      ) {
+
+        showStatus(
+          "Please enter a title, story idea and script."
+        );
+
+        return;
+
       }
 
 
-      localStorage.setItem(
-        "scriptTitle",
-        title
-      );
+      const project = {
+
+        title: title,
+
+        genre: genre,
+
+        story: story,
+
+        characters: characters,
+
+        script: script,
+
+        savedAt:
+          new Date().toISOString()
+
+      };
 
 
       localStorage.setItem(
-        "scriptText",
-        script
+        "creovixScript",
+        JSON.stringify(project)
       );
 
 
-      alert(
-        "Your script has been saved!"
+      updatePreview(project);
+
+
+      showStatus(
+        "✓ Your CREOVIX script has been saved."
       );
 
     }
 
+
+    /* =========================================
+       BUILD SCRIPT TEMPLATE
+       ========================================= */
+
+    function generateTemplate() {
+
+      const title =
+        document
+          .getElementById("scriptTitle")
+          .value
+          .trim() ||
+        "UNTITLED";
+
+
+      const genre =
+        document
+          .getElementById("genre")
+          .value ||
+        "DRAMA";
+
+
+      const story =
+        document
+          .getElementById("storyIdea")
+          .value
+          .trim() ||
+        "Write your story idea here.";
+
+
+      const characters =
+        getCharacters();
+
+
+      let characterText =
+        "CHARACTERS\n\n";
+
+
+      if (characters.length === 0) {
+
+        characterText +=
+          "Add your characters above.\n\n";
+
+      } else {
+
+        characters.forEach(function(character) {
+
+          characterText +=
+            character.name +
+            " — " +
+            (
+              character.description ||
+              "Character description"
+            ) +
+            "\n";
+
+        });
+
+        characterText += "\n";
+
+      }
+
+
+      const template =
+
+`TITLE: ${title}
+
+GENRE: ${genre}
+
+LOGLINE:
+${story}
+
+${characterText}
+
+FADE IN:
+
+EXT. LOCATION - DAY
+
+Describe the opening scene here.
+
+CHARACTER
+Dialogue goes here.
+
+ANOTHER CHARACTER
+Response goes here.
+
+CUT TO:
+
+INT. LOCATION - NIGHT
+
+Describe the next scene here.
+
+FADE OUT.`;
+
+
+      document
+        .getElementById("scriptText")
+        .value = template;
+
+
+      showStatus(
+        "✓ Script template created."
+      );
+
+    }
+
+
+    /* =========================================
+       DOWNLOAD SCRIPT
+       ========================================= */
+
+    function downloadScript() {
+
+      const title =
+        document
+          .getElementById("scriptTitle")
+          .value
+          .trim() ||
+        "creovix-script";
+
+
+      const script =
+        document
+          .getElementById("scriptText")
+          .value
+          .trim();
+
+
+      if (script === "") {
+
+        showStatus(
+          "Write or build a script before downloading."
+        );
+
+        return;
+
+      }
+
+
+      const file = new Blob(
+        [script],
+        {
+          type: "text/plain"
+        }
+      );
+
+
+      const url =
+        URL.createObjectURL(file);
+
+
+      const link =
+        document.createElement("a");
+
+
+      link.href = url;
+
+      link.download =
+        title.replace(
+          /[^a-z0-9]/gi,
+          "_"
+        ) + ".txt";
+
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      document.body.removeChild(link);
+
+      URL.revokeObjectURL(url);
+
+
+      showStatus(
+        "✓ Script downloaded."
+      );
+
+    }
+
+
+    /* =========================================
+       LOAD SAVED SCRIPT
+       ========================================= */
+
+    function loadSavedScript() {
+
+      const saved =
+        localStorage.getItem(
+          "creovixScript"
+        );
+
+
+      if (!saved) return;
+
+
+      try {
+
+        const project =
+          JSON.parse(saved);
+
+
+        document
+          .getElementById("scriptTitle")
+          .value =
+          project.title || "";
+
+
+        document
+          .getElementById("genre")
+          .value =
+          project.genre || "";
+
+
+        document
+          .getElementById("storyIdea")
+          .value =
+          project.story || "";
+
+
+        document
+          .getElementById("scriptText")
+          .value =
+          project.script || "";
+
+
+        updatePreview(project);
+
+
+      } catch (error) {
+
+        console.error(
+          "Could not load saved CREOVIX project.",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* =========================================
+       PREVIEW
+       ========================================= */
+
+    function updatePreview(project) {
+
+      const preview =
+        document.getElementById(
+          "scriptPreview"
+        );
+
+
+      preview.textContent =
+
+`TITLE: ${project.title}
+
+GENRE: ${project.genre || "Not selected"}
+
+STORY IDEA:
+${project.story}
+
+CHARACTERS:
+${project.characters
+  .map(function(character) {
+    return character.name +
+      " — " +
+      character.description;
+  })
+  .join("\n")}
+
+SCRIPT:
+
+${project.script}`;
+
+    }
+
+
+    /* =========================================
+       STATUS
+       ========================================= */
+
+    function showStatus(message) {
+
+      const status =
+        document.getElementById("status");
+
+      status.textContent =
+        message;
+
+      setTimeout(function() {
+
+        status.textContent = "";
+
+      }, 4000);
+
+    }
+
+
+    /* =========================================
+       START
+       ========================================= */
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      loadSavedScript
+    );
+
   </script>
 
+
 </body>
+
 </html>
