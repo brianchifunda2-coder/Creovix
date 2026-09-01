@@ -14,7 +14,6 @@
 
   <link rel="stylesheet" href="styles.css">
 
-  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
@@ -157,6 +156,10 @@
 
       <a href="script-creator.html">
         Scripts
+      </a>
+
+      <a href="dashboard.html">
+        Dashboard
       </a>
 
     </nav>
@@ -363,11 +366,19 @@
 
 
     /* =========================================
-       CREOVIX REDIRECT URL
+       EMAIL CONFIRMATION REDIRECT
        ========================================= */
 
     const EMAIL_REDIRECT_URL =
       "https://brianchifunda2-coder.github.io/Creovix/login.html";
+
+
+    /* =========================================
+       CREOVIX DASHBOARD
+       ========================================= */
+
+    const DASHBOARD_URL =
+      "dashboard.html";
 
 
     /* =========================================
@@ -403,7 +414,7 @@
 
 
     /* =========================================
-       SHOW MESSAGE
+       MESSAGE
        ========================================= */
 
     function showMessage(message) {
@@ -429,6 +440,7 @@
         if (signupMode) {
 
           loginForm.style.display = "none";
+
           signupForm.style.display = "block";
 
           authTitle.textContent =
@@ -446,6 +458,7 @@
         } else {
 
           loginForm.style.display = "block";
+
           signupForm.style.display = "none";
 
           authTitle.textContent =
@@ -536,12 +549,6 @@
           }
 
 
-          /*
-           * When email confirmation is enabled,
-           * Supabase creates the account but does
-           * not create a session yet.
-           */
-
           if (
             data.user &&
             !data.session
@@ -560,23 +567,18 @@
           }
 
 
-          /*
-           * If email confirmation is disabled,
-           * the user can enter CREOVIX immediately.
-           */
-
           if (data.session) {
 
             showMessage(
-              "✓ Account created successfully!"
+              "✓ Account created! Opening your dashboard..."
             );
 
             setTimeout(function () {
 
               window.location.href =
-                "index.html";
+                DASHBOARD_URL;
 
-            }, 1000);
+            }, 800);
 
             return;
 
@@ -672,14 +674,14 @@
 
 
           showMessage(
-            "✓ Login successful!"
+            "✓ Login successful! Opening dashboard..."
           );
 
 
           setTimeout(function () {
 
             window.location.href =
-              "index.html";
+              DASHBOARD_URL;
 
           }, 800);
 
@@ -709,7 +711,7 @@
 
 
     /* =========================================
-       CHECK EMAIL CONFIRMATION / SESSION
+       CHECK SESSION / EMAIL CONFIRMATION
        ========================================= */
 
     async function checkSession() {
@@ -735,34 +737,61 @@
         }
 
 
-        if (data.session) {
+        const currentUrl =
+          window.location.href;
 
-          /*
-           * If the user has just returned from
-           * clicking the email confirmation link,
-           * show confirmation success.
-           */
 
-          const currentUrl =
-            window.location.href;
+        /*
+         * User has returned from email confirmation.
+         */
 
-          if (
+        if (
+          data.session &&
+          (
             currentUrl.includes("access_token") ||
             currentUrl.includes("code=")
-          ) {
+          )
+        ) {
 
-            showMessage(
-              "✓ Email confirmed! You are now logged in."
-            );
+          showMessage(
+            "✓ Email confirmed! Opening your dashboard..."
+          );
 
-            setTimeout(function () {
 
-              window.location.href =
-                "index.html";
+          /*
+           * Remove authentication information
+           * from the browser URL before redirecting.
+           */
 
-            }, 1200);
+          window.history.replaceState(
+            {},
+            document.title,
+            "login.html"
+          );
 
-          }
+
+          setTimeout(function () {
+
+            window.location.href =
+              DASHBOARD_URL;
+
+          }, 1000);
+
+
+          return;
+
+        }
+
+
+        /*
+         * If a logged-in user opens login.html
+         * directly, send them to the dashboard.
+         */
+
+        if (data.session) {
+
+          window.location.href =
+            DASHBOARD_URL;
 
         }
 
