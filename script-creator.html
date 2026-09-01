@@ -1,21 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Script Studio - CREOVIX</title>
 
   <link rel="stylesheet" href="styles.css">
 
-  <style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+  <style>
     .studio-card {
       max-width: 1000px;
       margin: 30px auto;
@@ -30,7 +25,6 @@
       display: block;
       margin-bottom: 8px;
       font-weight: bold;
-      color: #ffffff;
     }
 
     .form-group input,
@@ -41,7 +35,7 @@
       border-radius: 8px;
       border: 1px solid #333;
       background: #111;
-      color: #ffffff;
+      color: #fff;
     }
 
     .form-group textarea {
@@ -63,14 +57,18 @@
       border-radius: 8px;
     }
 
-    .remove-character {
-      width: auto;
-      padding: 10px 15px;
-      background: #333;
+    button {
+      padding: 13px 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      background: #008cff;
+      color: #fff;
     }
 
-    .remove-character:hover {
-      background: #aa2222;
+    .remove-character {
+      background: #333;
     }
 
     .tool-buttons {
@@ -89,26 +87,16 @@
       border: 1px solid #333;
     }
 
-    .secondary-action:hover {
-      background: #222;
-    }
-
     .script-output {
       margin-top: 30px;
       padding: 25px;
-
       background: #000;
-
       border: 1px solid #333;
       border-radius: 10px;
-
       text-align: left;
-
       white-space: pre-wrap;
-
       min-height: 250px;
-
-      color: #eeeeee;
+      color: #eee;
     }
 
     .status {
@@ -118,550 +106,541 @@
     }
 
     @media (max-width: 650px) {
-
       .character-row {
         grid-template-columns: 1fr;
-      }
-
-      .remove-character {
-        width: 100%;
       }
 
       .tool-buttons {
         grid-template-columns: 1fr;
       }
-
     }
-
   </style>
-
 </head>
-
 
 <body>
 
+<header class="top-bar">
+  <div class="logo">CREOVIX</div>
 
-  <!-- HEADER -->
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="script-creator.html">Scripts</a>
+    <a href="speech-writer.html">Speeches</a>
+    <a href="short-clips.html">Short Clips</a>
+    <a href="movie-editing.html">Movie Editing</a>
+    <a href="clip-visionary.html">Clip Visionary</a>
+  </nav>
+</header>
 
-  <header class="top-bar">
+<section class="section">
 
-    <div class="logo">
-      CREOVIX
+  <h2>🎬 Script Studio</h2>
+
+  <p>
+    Turn your movie idea into a structured script project.
+  </p>
+
+  <div class="card studio-card">
+
+    <div class="form-group">
+      <label for="scriptTitle">Movie / Script Title</label>
+
+      <input
+        id="scriptTitle"
+        type="text"
+        placeholder="Example: From The Trenches"
+      >
     </div>
 
-    <nav>
+    <div class="form-group">
+      <label for="genre">Genre</label>
 
-      <a href="index.html">
-        Home
-      </a>
+      <select id="genre">
+        <option value="">Select a genre</option>
+        <option>Action</option>
+        <option>Drama</option>
+        <option>Comedy</option>
+        <option>Romance</option>
+        <option>Thriller</option>
+        <option>Horror</option>
+        <option>Adventure</option>
+        <option>Sci-Fi</option>
+      </select>
+    </div>
 
-      <a href="script-creator.html">
-        Scripts
-      </a>
+    <div class="form-group">
+      <label for="storyIdea">Story Idea</label>
 
-    </nav>
+      <textarea
+        id="storyIdea"
+        placeholder="Describe your movie idea, characters, conflict and what happens in the story..."
+      ></textarea>
+    </div>
 
-  </header>
+    <div class="form-group">
 
+      <label>Characters</label>
 
-  <!-- SCRIPT STUDIO -->
+      <div id="characters">
 
-  <section class="section">
+        <div class="character-row">
 
-    <h2>
-      🎬 Script Studio
-    </h2>
+          <input
+            type="text"
+            placeholder="Character name"
+            class="character-name"
+          >
 
-    <p>
-      Turn your movie idea into a structured script project.
-    </p>
+          <input
+            type="text"
+            placeholder="Character description"
+            class="character-description"
+          >
 
-
-    <div class="card studio-card">
-
-
-      <!-- TITLE -->
-
-      <div class="form-group">
-
-        <label for="scriptTitle">
-          Movie / Script Title
-        </label>
-
-        <input
-          id="scriptTitle"
-          type="text"
-          placeholder="Example: From The Trenches"
-        >
-
-      </div>
-
-
-      <!-- GENRE -->
-
-      <div class="form-group">
-
-        <label for="genre">
-          Genre
-        </label>
-
-        <select id="genre">
-
-          <option value="">
-            Select a genre
-          </option>
-
-          <option>
-            Action
-          </option>
-
-          <option>
-            Drama
-          </option>
-
-          <option>
-            Comedy
-          </option>
-
-          <option>
-            Romance
-          </option>
-
-          <option>
-            Thriller
-          </option>
-
-          <option>
-            Horror
-          </option>
-
-          <option>
-            Adventure
-          </option>
-
-          <option>
-            Sci-Fi
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <!-- STORY IDEA -->
-
-      <div class="form-group">
-
-        <label for="storyIdea">
-          Story Idea
-        </label>
-
-        <textarea
-          id="storyIdea"
-          placeholder="Describe your movie idea, characters, conflict and what happens in the story..."
-        ></textarea>
-
-      </div>
-
-
-      <!-- CHARACTERS -->
-
-      <div class="form-group">
-
-        <label>
-          Characters
-        </label>
-
-
-        <div id="characters">
-
-          <div class="character-row">
-
-            <input
-              type="text"
-              placeholder="Character name"
-              class="character-name"
-            >
-
-            <input
-              type="text"
-              placeholder="Character description"
-              class="character-description"
-            >
-
-            <button
-              type="button"
-              class="remove-character"
-              onclick="removeCharacter(this)"
-            >
-              Remove
-            </button>
-
-          </div>
+          <button
+            type="button"
+            class="remove-character"
+            onclick="removeCharacter(this)"
+          >
+            Remove
+          </button>
 
         </div>
 
-
-        <button
-          type="button"
-          class="secondary-action"
-          onclick="addCharacter()"
-        >
-          + Add Character
-        </button>
-
       </div>
 
-
-      <!-- SCRIPT -->
-
-      <div class="form-group">
-
-        <label for="scriptText">
-          Your Script
-        </label>
-
-        <textarea
-          id="scriptText"
-          placeholder="Write your scenes, dialogue and action here..."
-          style="min-height:400px;"
-        ></textarea>
-
-      </div>
-
-
-      <!-- ACTIONS -->
-
-      <div class="tool-buttons">
-
-        <button
-          type="button"
-          onclick="saveScript()"
-        >
-          💾 Save
-        </button>
-
-
-        <button
-          type="button"
-          class="secondary-action"
-          onclick="generateTemplate()"
-        >
-          ✨ Build Template
-        </button>
-
-
-        <button
-          type="button"
-          class="secondary-action"
-          onclick="downloadScript()"
-        >
-          📥 Download
-        </button>
-
-      </div>
-
-
-      <div
-        id="status"
-        class="status"
-      ></div>
-
-
-    </div>
-
-
-    <!-- SCRIPT PREVIEW -->
-
-    <div class="card studio-card">
-
-      <h3>
-        Script Preview
-      </h3>
-
-      <div
-        id="scriptPreview"
-        class="script-output"
+      <button
+        type="button"
+        class="secondary-action"
+        onclick="addCharacter()"
       >
-        Your saved script preview will appear here.
-      </div>
+        + Add Character
+      </button>
 
     </div>
 
+    <div class="form-group">
 
-  </section>
+      <label for="scriptText">Your Script</label>
 
+      <textarea
+        id="scriptText"
+        placeholder="Write your scenes, dialogue and action here..."
+        style="min-height:400px;"
+      ></textarea>
 
-  <!-- FOOTER -->
+    </div>
 
-  <footer>
+    <div class="tool-buttons">
 
-    <p>
-      © 2026 CREOVIX. All rights reserved.
-    </p>
+      <button
+        type="button"
+        onclick="saveScript()"
+      >
+        💾 Save
+      </button>
 
-  </footer>
+      <button
+        type="button"
+        class="secondary-action"
+        onclick="generateTemplate()"
+      >
+        ✨ Build Template
+      </button>
 
+      <button
+        type="button"
+        class="secondary-action"
+        onclick="downloadScript()"
+      >
+        📥 Download
+      </button>
 
-  <script>
+    </div>
 
-    /* =========================================
-       ADD CHARACTER
-       ========================================= */
+    <div id="status" class="status"></div>
 
-    function addCharacter() {
+  </div>
 
-      const container =
-        document.getElementById("characters");
+  <div class="card studio-card">
 
-      const row =
-        document.createElement("div");
+    <h3>Script Preview</h3>
 
-      row.className =
-        "character-row";
+    <div id="scriptPreview" class="script-output">
+      Your saved script preview will appear here.
+    </div>
 
-      row.innerHTML = `
+  </div>
 
-        <input
-          type="text"
-          placeholder="Character name"
-          class="character-name"
-        >
+</section>
 
-        <input
-          type="text"
-          placeholder="Character description"
-          class="character-description"
-        >
+<footer>
+  <p>© 2026 CREOVIX. All rights reserved.</p>
+</footer>
 
-        <button
-          type="button"
-          class="remove-character"
-          onclick="removeCharacter(this)"
-        >
-          Remove
-        </button>
+<script>
 
-      `;
+/* =========================================
+   SUPABASE
+   ========================================= */
 
-      container.appendChild(row);
+const SUPABASE_URL =
+  "https://sxdfwbvjohzgfaatqxqk.supabase.co";
 
-    }
+const SUPABASE_KEY =
+  "sb_publishable_Izxu9zWrYhf3rqEUDxInVQ_1qdGoJdQ";
 
-
-    /* =========================================
-       REMOVE CHARACTER
-       ========================================= */
-
-    function removeCharacter(button) {
-
-      const rows =
-        document.querySelectorAll(".character-row");
-
-      if (rows.length <= 1) {
-
-        alert(
-          "You need at least one character."
-        );
-
-        return;
-
-      }
-
-      button
-        .parentElement
-        .remove();
-
-    }
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
 
 
-    /* =========================================
-       GET CHARACTERS
-       ========================================= */
+/* =========================================
+   ADD CHARACTER
+   ========================================= */
 
-    function getCharacters() {
+function addCharacter() {
 
-      const rows =
-        document.querySelectorAll(".character-row");
+  const container =
+    document.getElementById("characters");
 
-      const characters = [];
+  const row =
+    document.createElement("div");
 
-      rows.forEach(function(row) {
+  row.className = "character-row";
 
-        const name =
-          row
-            .querySelector(".character-name")
-            .value
-            .trim();
+  row.innerHTML = `
+    <input
+      type="text"
+      placeholder="Character name"
+      class="character-name"
+    >
 
-        const description =
-          row
-            .querySelector(".character-description")
-            .value
-            .trim();
+    <input
+      type="text"
+      placeholder="Character description"
+      class="character-description"
+    >
 
-        if (name !== "") {
+    <button
+      type="button"
+      class="remove-character"
+      onclick="removeCharacter(this)"
+    >
+      Remove
+    </button>
+  `;
 
-          characters.push({
-            name: name,
-            description: description
-          });
+  container.appendChild(row);
+}
 
-        }
 
+/* =========================================
+   REMOVE CHARACTER
+   ========================================= */
+
+function removeCharacter(button) {
+
+  const rows =
+    document.querySelectorAll(".character-row");
+
+  if (rows.length <= 1) {
+
+    alert("You need at least one character.");
+
+    return;
+  }
+
+  button.parentElement.remove();
+}
+
+
+/* =========================================
+   GET CHARACTERS
+   ========================================= */
+
+function getCharacters() {
+
+  const rows =
+    document.querySelectorAll(".character-row");
+
+  const characters = [];
+
+  rows.forEach(function(row) {
+
+    const name =
+      row.querySelector(".character-name")
+        .value.trim();
+
+    const description =
+      row.querySelector(".character-description")
+        .value.trim();
+
+    if (name !== "") {
+
+      characters.push({
+        name: name,
+        description: description
       });
 
-      return characters;
-
     }
 
+  });
 
-    /* =========================================
-       SAVE SCRIPT
-       ========================================= */
-
-    function saveScript() {
-
-      const title =
-        document
-          .getElementById("scriptTitle")
-          .value
-          .trim();
-
-      const genre =
-        document
-          .getElementById("genre")
-          .value;
-
-      const story =
-        document
-          .getElementById("storyIdea")
-          .value
-          .trim();
-
-      const script =
-        document
-          .getElementById("scriptText")
-          .value
-          .trim();
-
-      const characters =
-        getCharacters();
+  return characters;
+}
 
 
-      if (
-        title === "" ||
-        story === "" ||
-        script === ""
-      ) {
+/* =========================================
+   SAVE SCRIPT TO SUPABASE
+   ========================================= */
 
-        showStatus(
-          "Please enter a title, story idea and script."
-        );
+async function saveScript() {
 
-        return;
+  const status =
+    document.getElementById("status");
 
+  const title =
+    document.getElementById("scriptTitle")
+      .value.trim();
+
+  const genre =
+    document.getElementById("genre")
+      .value;
+
+  const story =
+    document.getElementById("storyIdea")
+      .value.trim();
+
+  const script =
+    document.getElementById("scriptText")
+      .value.trim();
+
+  const characters =
+    getCharacters();
+
+
+  if (
+    title === "" ||
+    story === "" ||
+    script === ""
+  ) {
+
+    status.textContent =
+      "Please enter a title, story idea and script.";
+
+    return;
+  }
+
+
+  status.textContent =
+    "⏳ Saving your script...";
+
+
+  try {
+
+    const {
+      data: {
+        user
       }
+    } =
+      await supabaseClient.auth.getUser();
 
 
-      const project = {
+    if (!user) {
 
-        title: title,
+      status.textContent =
+        "❌ Please log in before saving a script.";
 
-        genre: genre,
-
-        story: story,
-
-        characters: characters,
-
-        script: script,
-
-        savedAt:
-          new Date().toISOString()
-
-      };
-
-
-      localStorage.setItem(
-        "creovixScript",
-        JSON.stringify(project)
-      );
-
-
-      updatePreview(project);
-
-
-      showStatus(
-        "✓ Your CREOVIX script has been saved."
-      );
-
+      return;
     }
 
 
-    /* =========================================
-       BUILD SCRIPT TEMPLATE
-       ========================================= */
+    const { error } =
+      await supabaseClient
+        .from("scripts")
+        .insert({
 
-    function generateTemplate() {
+          user_id: user.id,
 
-      const title =
-        document
-          .getElementById("scriptTitle")
-          .value
-          .trim() ||
-        "UNTITLED";
+          title: title,
 
+          genre: genre,
 
-      const genre =
-        document
-          .getElementById("genre")
-          .value ||
-        "DRAMA";
+          story: story,
 
+          characters: characters,
 
-      const story =
-        document
-          .getElementById("storyIdea")
-          .value
-          .trim() ||
-        "Write your story idea here.";
-
-
-      const characters =
-        getCharacters();
-
-
-      let characterText =
-        "CHARACTERS\n\n";
-
-
-      if (characters.length === 0) {
-
-        characterText +=
-          "Add your characters above.\n\n";
-
-      } else {
-
-        characters.forEach(function(character) {
-
-          characterText +=
-            character.name +
-            " — " +
-            (
-              character.description ||
-              "Character description"
-            ) +
-            "\n";
+          script: script
 
         });
 
-        characterText += "\n";
 
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    const project = {
+
+      title: title,
+
+      genre: genre,
+
+      story: story,
+
+      characters: characters,
+
+      script: script
+
+    };
+
+
+    updatePreview(project);
+
+
+    status.textContent =
+      "✓ Script saved to your CREOVIX account.";
+
+  }
+
+  catch (error) {
+
+    console.error(error);
+
+    status.textContent =
+      "❌ Could not save script: " +
+      error.message;
+
+  }
+
+}
+
+
+/* =========================================
+   LOAD SCRIPTS
+   ========================================= */
+
+async function loadScripts() {
+
+  try {
+
+    const {
+      data: {
+        user
       }
+    } =
+      await supabaseClient.auth.getUser();
 
 
-      const template =
+    if (!user) {
 
+      return;
+
+    }
+
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("scripts")
+        .select("*")
+        .eq("user_id", user.id)
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        );
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    if (data && data.length > 0) {
+
+      updatePreview(data[0]);
+
+    }
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Could not load scripts:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================
+   BUILD TEMPLATE
+   ========================================= */
+
+function generateTemplate() {
+
+  const title =
+    document.getElementById("scriptTitle")
+      .value.trim() ||
+    "UNTITLED";
+
+  const genre =
+    document.getElementById("genre")
+      .value ||
+    "DRAMA";
+
+  const story =
+    document.getElementById("storyIdea")
+      .value.trim() ||
+    "Write your story idea here.";
+
+  const characters =
+    getCharacters();
+
+
+  let characterText =
+    "CHARACTERS\n\n";
+
+
+  if (characters.length === 0) {
+
+    characterText +=
+      "Add your characters above.\n\n";
+
+  } else {
+
+    characters.forEach(function(character) {
+
+      characterText +=
+        character.name +
+        " — " +
+        (
+          character.description ||
+          "Character description"
+        ) +
+        "\n";
+
+    });
+
+    characterText += "\n";
+  }
+
+
+  const template =
 `TITLE: ${title}
 
 GENRE: ${genre}
@@ -692,221 +671,147 @@ Describe the next scene here.
 FADE OUT.`;
 
 
-      document
-        .getElementById("scriptText")
-        .value = template;
+  document.getElementById("scriptText")
+    .value = template;
 
 
-      showStatus(
-        "✓ Script template created."
-      );
-
-    }
+  showStatus("✓ Script template created.");
+}
 
 
-    /* =========================================
-       DOWNLOAD SCRIPT
-       ========================================= */
+/* =========================================
+   DOWNLOAD
+   ========================================= */
 
-    function downloadScript() {
+function downloadScript() {
 
-      const title =
-        document
-          .getElementById("scriptTitle")
-          .value
-          .trim() ||
-        "creovix-script";
+  const title =
+    document.getElementById("scriptTitle")
+      .value.trim() ||
+    "creovix-script";
 
-
-      const script =
-        document
-          .getElementById("scriptText")
-          .value
-          .trim();
+  const script =
+    document.getElementById("scriptText")
+      .value.trim();
 
 
-      if (script === "") {
+  if (!script) {
 
-        showStatus(
-          "Write or build a script before downloading."
-        );
+    showStatus(
+      "Write or build a script before downloading."
+    );
 
-        return;
+    return;
+  }
 
+
+  const file =
+    new Blob(
+      [script],
+      {
+        type: "text/plain"
       }
+    );
 
 
-      const file = new Blob(
-        [script],
-        {
-          type: "text/plain"
-        }
-      );
+  const url =
+    URL.createObjectURL(file);
+
+  const link =
+    document.createElement("a");
+
+  link.href = url;
+
+  link.download =
+    title.replace(
+      /[^a-z0-9]/gi,
+      "_"
+    ) + ".txt";
 
 
-      const url =
-        URL.createObjectURL(file);
+  document.body.appendChild(link);
+
+  link.click();
+
+  document.body.removeChild(link);
+
+  URL.revokeObjectURL(url);
 
 
-      const link =
-        document.createElement("a");
+  showStatus("✓ Script downloaded.");
+}
 
 
-      link.href = url;
+/* =========================================
+   PREVIEW
+   ========================================= */
 
-      link.download =
-        title.replace(
-          /[^a-z0-9]/gi,
-          "_"
-        ) + ".txt";
+function updatePreview(project) {
 
-
-      document.body.appendChild(link);
-
-      link.click();
-
-      document.body.removeChild(link);
-
-      URL.revokeObjectURL(url);
+  const preview =
+    document.getElementById(
+      "scriptPreview"
+    );
 
 
-      showStatus(
-        "✓ Script downloaded."
-      );
-
-    }
+  const characters =
+    project.characters || [];
 
 
-    /* =========================================
-       LOAD SAVED SCRIPT
-       ========================================= */
-
-    function loadSavedScript() {
-
-      const saved =
-        localStorage.getItem(
-          "creovixScript"
-        );
-
-
-      if (!saved) return;
-
-
-      try {
-
-        const project =
-          JSON.parse(saved);
-
-
-        document
-          .getElementById("scriptTitle")
-          .value =
-          project.title || "";
-
-
-        document
-          .getElementById("genre")
-          .value =
-          project.genre || "";
-
-
-        document
-          .getElementById("storyIdea")
-          .value =
-          project.story || "";
-
-
-        document
-          .getElementById("scriptText")
-          .value =
-          project.script || "";
-
-
-        updatePreview(project);
-
-
-      } catch (error) {
-
-        console.error(
-          "Could not load saved CREOVIX project.",
-          error
-        );
-
-      }
-
-    }
-
-
-    /* =========================================
-       PREVIEW
-       ========================================= */
-
-    function updatePreview(project) {
-
-      const preview =
-        document.getElementById(
-          "scriptPreview"
-        );
-
-
-      preview.textContent =
-
-`TITLE: ${project.title}
+  preview.textContent =
+`TITLE: ${project.title || ""}
 
 GENRE: ${project.genre || "Not selected"}
 
 STORY IDEA:
-${project.story}
+${project.story || ""}
 
 CHARACTERS:
-${project.characters
+${characters
   .map(function(character) {
+
     return character.name +
       " — " +
-      character.description;
+      (character.description || "");
+
   })
   .join("\n")}
 
 SCRIPT:
 
-${project.script}`;
+${project.script || ""}`;
 
-    }
-
-
-    /* =========================================
-       STATUS
-       ========================================= */
-
-    function showStatus(message) {
-
-      const status =
-        document.getElementById("status");
-
-      status.textContent =
-        message;
-
-      setTimeout(function() {
-
-        status.textContent = "";
-
-      }, 4000);
-
-    }
+}
 
 
-    /* =========================================
-       START
-       ========================================= */
+/* =========================================
+   STATUS
+   ========================================= */
 
-    document.addEventListener(
-      "DOMContentLoaded",
-      loadSavedScript
-    );
+function showStatus(message) {
 
-  </script>
+  const status =
+    document.getElementById("status");
 
+  status.textContent =
+    message;
+
+  setTimeout(function() {
+
+    status.textContent = "";
+
+  }, 4000);
+
+}
+
+
+/* =========================================
+   START
+   ========================================= */
+
+loadScripts();
+
+</script>
 
 </body>
-
 </html>
