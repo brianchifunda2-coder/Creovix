@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Creator Profile - CREOVIX</title>
+
+  <link rel="stylesheet" href="styles.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    .profile-page {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    .profile-card {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 18px;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .profile-avatar {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #222;
+      border: 3px solid #fff;
+      margin-bottom: 15px;
+    }
+
+    .profile-card h1 {
+      margin-bottom: 5px;
+    }
+
+    .profile-email {
+      color: #aaa;
+      margin-bottom: 25px;
+    }
+
+    .profile-form {
+      text-align: left;
+      margin-top: 25px;
+    }
+
+    .profile-form label {
+      display: block;
+      margin: 15px 0 7px;
+      font-weight: bold;
+    }
+
+    .profile-form input,
+    .profile-form textarea {
+      width: 100%;
+      padding: 13px;
+      border-radius: 10px;
+      border: 1px solid #444;
+      background: #050505;
+      color: #fff;
+      font-size: 16px;
+    }
+
+    .profile-form textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .save-profile {
+      width: 100%;
+      margin-top: 20px;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      background: #fff;
+      color: #000;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .message {
+      margin-top: 15px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .back-dashboard {
+      display: inline-block;
+      margin-top: 20px;
+      color: #fff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="site-header">
+    <div class="logo">CREOVIX</div>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="script-creator.html">Scripts</a>
+      <a href="movie-editing.html">Editing</a>
+      <a href="dashboard.html">Dashboard</a>
+    </nav>
+  </header>
+
+  <main class="profile-page">
+
+    <div class="profile-card">
+
+      <img
+        id="profileAvatar"
+        class="profile-avatar"
+        src="https://via.placeholder.com/110"
+        alt="Creator Profile"
+      >
+
+      <h1 id="profileName">Creator</h1>
+
+      <p id="profileEmail" class="profile-email"></p>
+
+      <form id="profileForm" class="profile-form">
+
+        <label for="creatorName">Creator Name</label>
+        <input
+          type="text"
+          id="creatorName"
+          placeholder="Enter your creator name"
+          required
+        >
+
+        <label for="bio">Bio</label>
+        <textarea
+          id="bio"
+          placeholder="Tell people about yourself and your creative work..."
+        ></textarea>
+
+        <label for="skills">Creative Skills</label>
+        <input
+          type="text"
+          id="skills"
+          placeholder="Example: Music, Video Editing, Photography"
+        >
+
+        <label for="website">Website / Social Link</label>
+        <input
+          type="url"
+          id="website"
+          placeholder="https://example.com"
+        >
+
+        <label for="avatar">Profile Image URL</label>
+        <input
+          type="url"
+          id="avatar"
+          placeholder="Paste your image URL"
+        >
+
+        <button type="submit" class="save-profile">
+          Save Creator Profile
+        </button>
+
+        <div id="message" class="message"></div>
+
+      </form>
+
+      <a href="dashboard.html" class="back-dashboard">
+        ← Back to Dashboard
+      </a>
+
+    </div>
+
+  </main>
+
+  <script>
+    const SUPABASE_URL =
+      "https://sxdfwbvjohzgfaatqxqk.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_Izxu9zWrYhf3rqEUDxInVQ_1qdGoJdQ";
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+    const profileForm =
+      document.getElementById("profileForm");
+
+    const creatorName =
+      document.getElementById("creatorName");
+
+    const bio =
+      document.getElementById("bio");
+
+    const skills =
+      document.getElementById("skills");
+
+    const website =
+      document.getElementById("website");
+
+    const avatar =
+      document.getElementById("avatar");
+
+    const profileName =
+      document.getElementById("profileName");
+
+    const profileEmail =
+      document.getElementById("profileEmail");
+
+    const profileAvatar =
+      document.getElementById("profileAvatar");
+
+    const message =
+      document.getElementById("message");
+
+
+    async function loadProfile() {
+
+      const {
+        data: { session }
+      } = await supabaseClient.auth.getSession();
+
+      if (!session) {
+        window.location.href = "login.html";
+        return;
+      }
+
+     
