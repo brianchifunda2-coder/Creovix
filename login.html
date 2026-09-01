@@ -90,6 +90,11 @@
       background: #006dcc;
     }
 
+    .auth-button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     .switch-auth {
       text-align: center;
       margin-top: 20px;
@@ -103,6 +108,7 @@
       color: #00aaff;
       border: none;
       font-weight: bold;
+      cursor: pointer;
     }
 
     .switch-auth button:hover {
@@ -116,6 +122,7 @@
       min-height: 24px;
       color: #00aaff;
       font-weight: bold;
+      line-height: 1.5;
     }
 
     .back-home {
@@ -187,6 +194,7 @@
             id="loginEmail"
             type="email"
             placeholder="you@example.com"
+            autocomplete="email"
             required
           >
 
@@ -203,6 +211,7 @@
             id="loginPassword"
             type="password"
             placeholder="Enter your password"
+            autocomplete="current-password"
             required
           >
 
@@ -212,6 +221,7 @@
         <button
           type="submit"
           class="auth-button"
+          id="loginButton"
         >
           Login
         </button>
@@ -236,6 +246,7 @@
             id="signupName"
             type="text"
             placeholder="Your creator name"
+            autocomplete="name"
             required
           >
 
@@ -252,6 +263,7 @@
             id="signupEmail"
             type="email"
             placeholder="you@example.com"
+            autocomplete="email"
             required
           >
 
@@ -269,6 +281,7 @@
             type="password"
             placeholder="Create a password"
             minlength="6"
+            autocomplete="new-password"
             required
           >
 
@@ -278,6 +291,7 @@
         <button
           type="submit"
           class="auth-button"
+          id="signupButton"
         >
           Create Account
         </button>
@@ -349,6 +363,14 @@
 
 
     /* =========================================
+       CREOVIX REDIRECT URL
+       ========================================= */
+
+    const EMAIL_REDIRECT_URL =
+      "https://brianchifunda2-coder.github.io/Creovix/login.html";
+
+
+    /* =========================================
        ELEMENTS
        ========================================= */
 
@@ -373,6 +395,23 @@
     const authMessage =
       document.getElementById("authMessage");
 
+    const loginButton =
+      document.getElementById("loginButton");
+
+    const signupButton =
+      document.getElementById("signupButton");
+
+
+    /* =========================================
+       SHOW MESSAGE
+       ========================================= */
+
+    function showMessage(message) {
+
+      authMessage.textContent = message;
+
+    }
+
 
     /* =========================================
        SWITCH LOGIN / SIGNUP
@@ -385,7 +424,7 @@
         const signupMode =
           signupForm.style.display === "none";
 
-        authMessage.textContent = "";
+        showMessage("");
 
         if (signupMode) {
 
@@ -437,8 +476,11 @@
 
         event.preventDefault();
 
-        authMessage.textContent =
-          "Creating your account...";
+        signupButton.disabled = true;
+
+        showMessage(
+          "Creating your account..."
+        );
 
 
         const name =
@@ -473,9 +515,17 @@
               password: password,
 
               options: {
+
+                emailRedirectTo:
+                  EMAIL_REDIRECT_URL,
+
                 data: {
-                  creator_name: name
+
+                  creator_name:
+                    name
+
                 }
+
               }
 
             });
@@ -486,38 +536,75 @@
           }
 
 
+          /*
+           * When email confirmation is enabled,
+           * Supabase creates the account but does
+           * not create a session yet.
+           */
+
           if (
             data.user &&
             !data.session
           ) {
 
-            authMessage.textContent =
-              "✓ Account created. Check your email to confirm your account.";
+            showMessage(
+              "✓ Account created! Check your email and click the confirmation link."
+            );
+
+            signupForm.reset();
+
+            signupButton.disabled = false;
 
             return;
 
           }
 
 
-          authMessage.textContent =
-            "✓ Account created successfully!";
+          /*
+           * If email confirmation is disabled,
+           * the user can enter CREOVIX immediately.
+           */
+
+          if (data.session) {
+
+            showMessage(
+              "✓ Account created successfully!"
+            );
+
+            setTimeout(function () {
+
+              window.location.href =
+                "index.html";
+
+            }, 1000);
+
+            return;
+
+          }
 
 
-          setTimeout(function () {
-
-            window.location.href =
-              "index.html";
-
-          }, 1000);
+          throw new Error(
+            "Account was created, but no login session was returned."
+          );
 
         }
 
         catch (error) {
 
-          console.error(error);
+          console.error(
+            "CREOVIX signup error:",
+            error
+          );
 
-          authMessage.textContent =
-            "❌ " + error.message;
+          showMessage(
+            "❌ " +
+            (
+              error.message ||
+              "Unable to create account."
+            )
+          );
+
+          signupButton.disabled = false;
 
         }
 
@@ -535,8 +622,11 @@
 
         event.preventDefault();
 
-        authMessage.textContent =
-          "Logging in...";
+        loginButton.disabled = true;
+
+        showMessage(
+          "Logging in..."
+        );
 
 
         const email =
@@ -581,8 +671,9 @@
           }
 
 
-          authMessage.textContent =
-            "✓ Login successful!";
+          showMessage(
+            "✓ Login successful!"
+          );
 
 
           setTimeout(function () {
@@ -596,10 +687,20 @@
 
         catch (error) {
 
-          console.error(error);
+          console.error(
+            "CREOVIX login error:",
+            error
+          );
 
-          authMessage.textContent =
-            "❌ " + error.message;
+          showMessage(
+            "❌ " +
+            (
+              error.message ||
+              "Unable to log in."
+            )
+          );
+
+          loginButton.disabled = false;
 
         }
 
@@ -608,27 +709,96 @@
 
 
     /* =========================================
-       CHECK CURRENT SESSION
+       CHECK EMAIL CONFIRMATION / SESSION
        ========================================= */
 
     async function checkSession() {
 
-      const {
-        data
-      } =
-        await supabaseClient.auth.getSession();
+      try {
+
+        const {
+          data,
+          error
+        } =
+          await supabaseClient.auth.getSession();
 
 
-      if (data.session) {
+        if (error) {
 
-        console.log(
-          "CREOVIX user is already logged in."
+          console.error(
+            "Session error:",
+            error
+          );
+
+          return;
+
+        }
+
+
+        if (data.session) {
+
+          /*
+           * If the user has just returned from
+           * clicking the email confirmation link,
+           * show confirmation success.
+           */
+
+          const currentUrl =
+            window.location.href;
+
+          if (
+            currentUrl.includes("access_token") ||
+            currentUrl.includes("code=")
+          ) {
+
+            showMessage(
+              "✓ Email confirmed! You are now logged in."
+            );
+
+            setTimeout(function () {
+
+              window.location.href =
+                "index.html";
+
+            }, 1200);
+
+          }
+
+        }
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "Session check failed:",
+          error
         );
 
       }
 
     }
 
+
+    /* =========================================
+       AUTH STATE CHANGES
+       ========================================= */
+
+    supabaseClient.auth.onAuthStateChange(
+      function (event, session) {
+
+        console.log(
+          "CREOVIX auth event:",
+          event
+        );
+
+      }
+    );
+
+
+    /* =========================================
+       START
+       ========================================= */
 
     checkSession();
 
