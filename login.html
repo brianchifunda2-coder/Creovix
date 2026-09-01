@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Login - CREOVIX</title>
+
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+
+    .auth-section {
+      min-height: 75vh;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 50px 20px;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 480px;
+
+      background: #0d0d0d;
+
+      border: 1px solid #252525;
+
+      border-radius: 18px;
+
+      padding: 35px;
+
+      box-shadow:
+        0 15px 50px rgba(0, 0, 0, 0.6);
+    }
+
+    .auth-card h1 {
+      text-align: center;
+
+      font-size: 34px;
+
+      margin-bottom: 8px;
+    }
+
+    .auth-subtitle {
+      text-align: center;
+
+      color: #888;
+
+      margin-bottom: 30px;
+    }
+
+    .auth-form-group {
+      margin-bottom: 18px;
+    }
+
+    .auth-form-group label {
+      display: block;
+
+      margin-bottom: 7px;
+
+      font-weight: bold;
+    }
+
+    .auth-form-group input {
+      width: 100%;
+
+      padding: 13px;
+
+      background: #111;
+
+      color: #fff;
+
+      border: 1px solid #333;
+
+      border-radius: 8px;
+
+      outline: none;
+    }
+
+    .auth-form-group input:focus {
+      border-color: #008cff;
+
+      box-shadow:
+        0 0 0 2px rgba(0, 140, 255, 0.15);
+    }
+
+    .auth-button {
+      width: 100%;
+
+      padding: 14px;
+
+      background: #008cff;
+
+      color: white;
+
+      border: none;
+
+      border-radius: 8px;
+
+      font-size: 16px;
+
+      font-weight: bold;
+
+      cursor: pointer;
+    }
+
+    .auth-button:hover {
+      background: #006dcc;
+    }
+
+    .switch-auth {
+      text-align: center;
+
+      margin-top: 20px;
+
+      color: #888;
+    }
+
+    .switch-auth button {
+      width: auto;
+
+      padding: 0;
+
+      background: transparent;
+
+      color: #00aaff;
+
+      border: none;
+
+      font-weight: bold;
+    }
+
+    .switch-auth button:hover {
+      background: transparent;
+
+      transform: none;
+    }
+
+    .auth-message {
+      text-align: center;
+
+      margin-top: 15px;
+
+      min-height: 24px;
+
+      color: #00aaff;
+
+      font-weight: bold;
+    }
+
+    .back-home {
+      display: block;
+
+      text-align: center;
+
+      margin-top: 25px;
+
+      color: #888;
+
+      text-decoration: none;
+    }
+
+    .back-home:hover {
+      color: #00aaff;
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <!-- HEADER -->
+
+  <header class="top-bar">
+
+    <div class="logo">
+      CREOVIX
+    </div>
+
+    <nav>
+
+      <a href="index.html">
+        Home
+      </a>
+
+      <a href="script-creator.html">
+        Scripts
+      </a>
+
+    </nav>
+
+  </header>
+
+
+  <!-- AUTHENTICATION -->
+
+  <section class="auth-section">
+
+    <div class="auth-card">
+
+      <h1 id="authTitle">
+        Welcome Back
+      </h1>
+
+      <p
+        class="auth-subtitle"
+        id="authSubtitle"
+      >
+        Login to your CREOVIX creator account.
+      </p>
+
+
+      <!-- LOGIN FORM -->
+
+      <form id="loginForm">
+
+        <div class="auth-form-group">
+
+          <label for="loginEmail">
+            Email
+          </label>
+
+          <input
+            id="loginEmail"
+            type="email"
+            placeholder="you@example.com"
+            required
+          >
+
+        </div>
+
+
+        <div class="auth-form-group">
+
+          <label for="loginPassword">
+            Password
+          </label>
+
+          <input
+            id="loginPassword"
+            type="password"
+            placeholder="Enter your password"
+            required
+          >
+
+        </div>
+
+
+        <button
+          type="submit"
+          class="auth-button"
+        >
+          Login
+        </button>
+
+      </form>
+
+
+      <!-- SIGNUP FORM -->
+
+      <form
+        id="signupForm"
+        style="display:none;"
+      >
+
+        <div class="auth-form-group">
+
+          <label for="signupName">
+            Creator Name
+          </label>
+
+          <input
+            id="signupName"
+            type="text"
+            placeholder="Your creator name"
+            required
+          >
+
+        </div>
+
+
+        <div class="auth-form-group">
+
+          <label for="signupEmail">
+            Email
+          </label>
+
+          <input
+            id="signupEmail"
+            type="email"
+            placeholder="you@example.com"
+            required
+          >
+
+        </div>
+
+
+        <div class="auth-form-group">
+
+          <label for="signupPassword">
+            Password
+          </label>
+
+          <input
+            id="signupPassword"
+            type="password"
+            placeholder="Create a password"
+            minlength="6"
+            required
+          >
+
+        </div>
+
+
+        <button
+          type="submit"
+          class="auth-button"
+        >
+          Create Account
+        </button>
+
+      </form>
+
+
+      <!-- SWITCH -->
+
+      <div class="switch-auth">
+
+        <span id="switchText">
+          Don't have an account?
+        </span>
+
+        <button
+          type="button"
+          id="switchButton"
+        >
+          Sign Up
+        </button>
+
+      </div>
+
+
+      <div
+        id="authMessage"
+        class="auth-message"
+      ></div>
+
+
+      <a
+        href="index.html"
+        class="back-home"
+      >
+        ← Back to CREOVIX
+      </a>
+
+    </div>
+
+  </section>
+
+
+  <!-- FOOTER -->
+
+  <footer>
+
+    <p>
+      © 2026 CREOVIX. All rights reserved.
+    </p>
+
+  </footer>
+
+
+  <script>
+
+    let signupMode = false;
+
+
+    /* =========================================
+       ELEMENTS
+       ========================================= */
+
+    const loginForm =
+      document.getElementById("loginForm");
+
+    const signupForm =
+      document.getElementById("signupForm");
+
+    const authTitle =
+      document.getElementById("authTitle");
+
+    const authSubtitle =
+      document.getElementById("authSubtitle");
+
+    const switchText =
+      document.getElementById("switchText");
+
+    const switchButton =
+      document.getElementById("switchButton");
+
+    const authMessage =
+      document.getElementById("authMessage");
+
+
+    /* =========================================
+       SWITCH LOGIN / SIGNUP
+       ========================================= */
+
+    switchButton.addEventListener(
+      "click",
+      function () {
+
+        signupMode = !signupMode;
+
+        authMessage.textContent = "";
+
+
+        if (signupMode) {
+
+          loginForm.style.display =
+            "none";
+
+          signupForm.style.display =
+            "block";
+
+          authTitle.textContent =
+            "Create Account";
+
+          authSubtitle.textContent =
+            "Join CREOVIX and start creating.";
+
+          switchText.textContent =
+            "Already have an account?";
+
+          switchButton.textContent =
+            "Login";
+
+        } else {
+
+          loginForm.style.display =
+            "block";
+
+          signupForm.style.display =
+            "none";
+
+          authTitle.textContent =
+            "Welcome Back";
+
+          authSubtitle.textContent =
+            "Login to your CREOVIX creator account.";
+
+          switchText.textContent =
+            "Don't have an account?";
+
+          switchButton.textContent =
+            "Sign Up";
+
+        }
+
+      }
+    );
+
+
+    /* =========================================
+       CREATE ACCOUNT
+       ========================================= */
+
+    signupForm.addEventListener(
+      "submit",
+      function (event) {
+
+        event.preventDefault();
+
+
+        const name =
+          document
+            .getElementById("signupName")
+            .value
+            .trim();
+
+        const email =
+          document
+            .getElementById("signupEmail")
+            .value
+            .trim()
+            .toLowerCase();
+
+        const password =
+          document
+            .getElementById("signupPassword")
+            .value;
+
+
+        const account = {
+
+          name: name,
+
+          email: email,
+
+          password: password
+
+        };
+
+
+        localStorage.setItem(
+          "creovixAccount",
+          JSON.stringify(account)
+        );
+
+
+        localStorage.setItem(
+          "creovixLoggedIn",
+          "true"
+        );
+
+
+        localStorage.setItem(
+          "creovixUserName",
+          name
+        );
+
+
+        authMessage.textContent =
+          "✓ Account created successfully!";
+
+
+        setTimeout(function () {
+
+          window.location.href =
+            "index.html";
+
+        }, 1000);
+
+      }
+    );
+
+
+    /* =========================================
+       LOGIN
+       ========================================= */
+
+    loginForm.addEventListener(
+      "submit",
+      function (event) {
+
+        event.preventDefault();
+
+
+        const email =
+          document
+            .getElementById("loginEmail")
+            .value
+            .trim()
+            .toLowerCase();
+
+        const password =
+          document
+            .getElementById("loginPassword")
+            .value;
+
+
+        const saved =
+          localStorage.getItem(
+            "creovixAccount"
+          );
+
+
+        if (!saved) {
+
+          authMessage.textContent =
+            "No CREOVIX account found. Please sign up first.";
+
+          return;
+
+        }
+
+
+        const account =
+          JSON.parse(saved);
+
+
+        if (
+          email === account.email &&
+          password === account.password
+        ) {
+
+          localStorage.setItem(
+            "creovixLoggedIn",
+            "true"
+          );
+
+
+          localStorage.setItem(
+            "creovixUserName",
+            account.name
+          );
+
+
+          authMessage.textContent =
+            "✓ Login successful!";
+
+
+          setTimeout(function () {
+
+            window.location.href =
+              "index.html";
+
+          }, 800);
+
+
+        } else {
+
+          authMessage.textContent =
+            "Incorrect email or password.";
+
+        }
+
+      }
+    );
+
+  </script>
+
+
+</body>
+
+</html>
