@@ -59,6 +59,30 @@
       margin: 10px 0;
     }
 
+    /* Clickable Account Card */
+    .account-card {
+      display: block;
+      color: white;
+      text-decoration: none;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .account-card:hover {
+      transform: translateY(-3px);
+      border-color: #555;
+    }
+
+    .account-card p {
+      margin-bottom: 8px;
+    }
+
+    .view-profile {
+      color: #fff;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
     .tools {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -137,6 +161,7 @@
 
       <div class="dashboard-header">
         <h1>Welcome, <span id="creatorName">Creator</span> 👋</h1>
+
         <p>Your CREOVIX creator workspace.</p>
 
         <button id="logoutBtn" class="logout-btn">
@@ -164,11 +189,22 @@
           <p>Your uploaded creator clips.</p>
         </div>
 
-        <div class="dashboard-card">
+        <!-- CREATOR PROFILE -->
+        <a href="profile.html" class="dashboard-card account-card">
+
           <h3>👤 Account</h3>
+
           <div class="number">✓</div>
-          <p>Your CREOVIX account is active.</p>
-        </div>
+
+          <p>
+            Your CREOVIX account is active.
+          </p>
+
+          <span class="view-profile">
+            View & Edit Profile →
+          </span>
+
+        </a>
 
       </div>
 
