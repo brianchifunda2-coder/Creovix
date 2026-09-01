@@ -84,10 +84,15 @@
       cursor: pointer;
     }
 
+    .save-profile:hover {
+      opacity: 0.9;
+    }
+
     .message {
       margin-top: 15px;
       text-align: center;
       font-weight: bold;
+      min-height: 24px;
     }
 
     .back-dashboard {
@@ -95,6 +100,10 @@
       margin-top: 20px;
       color: #fff;
       text-decoration: none;
+    }
+
+    .back-dashboard:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -130,6 +139,7 @@
       <form id="profileForm" class="profile-form">
 
         <label for="creatorName">Creator Name</label>
+
         <input
           type="text"
           id="creatorName"
@@ -138,12 +148,14 @@
         >
 
         <label for="bio">Bio</label>
+
         <textarea
           id="bio"
           placeholder="Tell people about yourself and your creative work..."
         ></textarea>
 
         <label for="skills">Creative Skills</label>
+
         <input
           type="text"
           id="skills"
@@ -151,6 +163,7 @@
         >
 
         <label for="website">Website / Social Link</label>
+
         <input
           type="url"
           id="website"
@@ -158,6 +171,7 @@
         >
 
         <label for="avatar">Profile Image URL</label>
+
         <input
           type="url"
           id="avatar"
@@ -181,6 +195,7 @@
   </main>
 
   <script>
+
     const SUPABASE_URL =
       "https://sxdfwbvjohzgfaatqxqk.supabase.co";
 
@@ -192,6 +207,7 @@
         SUPABASE_URL,
         SUPABASE_KEY
       );
+
 
     const profileForm =
       document.getElementById("profileForm");
@@ -227,12 +243,154 @@
     async function loadProfile() {
 
       const {
-        data: { session }
+        data: { session },
+        error: sessionError
       } = await supabaseClient.auth.getSession();
 
-      if (!session) {
-        window.location.href = "login.html";
+
+      if (sessionError) {
+
+        message.textContent =
+          "❌ Unable to load your account.";
+
+        console.error(sessionError);
+
         return;
       }
 
-     
+
+      if (!session) {
+
+        window.location.href = "login.html";
+
+        return;
+      }
+
+
+      const user = session.user;
+
+
+      const savedName =
+        user.user_metadata?.creator_name ||
+        user.email.split("@")[0];
+
+
+      creatorName.value =
+        savedName;
+
+      profileName.textContent =
+        savedName;
+
+      profileEmail.textContent =
+        user.email;
+
+
+      if (user.user_metadata?.bio) {
+
+        bio.value =
+          user.user_metadata.bio;
+
+      }
+
+
+      if (user.user_metadata?.skills) {
+
+        skills.value =
+          user.user_metadata.skills;
+
+      }
+
+
+      if (user.user_metadata?.website) {
+
+        website.value =
+          user.user_metadata.website;
+
+      }
+
+
+      if (user.user_metadata?.avatar) {
+
+        avatar.value =
+          user.user_metadata.avatar;
+
+        profileAvatar.src =
+          user.user_metadata.avatar;
+
+      }
+
+    }
+
+
+    profileForm.addEventListener(
+      "submit",
+      async function(event) {
+
+        event.preventDefault();
+
+
+        message.textContent =
+          "Saving profile...";
+
+
+        const {
+          error
+        } = await supabaseClient.auth.updateUser({
+
+          data: {
+
+            creator_name:
+              creatorName.value.trim(),
+
+            bio:
+              bio.value.trim(),
+
+            skills:
+              skills.value.trim(),
+
+            website:
+              website.value.trim(),
+
+            avatar:
+              avatar.value.trim()
+
+          }
+
+        });
+
+
+        if (error) {
+
+          message.textContent =
+            "❌ " + error.message;
+
+          console.error(error);
+
+          return;
+        }
+
+
+        profileName.textContent =
+          creatorName.value.trim();
+
+
+        if (avatar.value.trim()) {
+
+          profileAvatar.src =
+            avatar.value.trim();
+
+        }
+
+
+        message.textContent =
+          "✓ Creator profile saved successfully!";
+
+    });
+
+
+    loadProfile();
+
+  </script>
+
+</body>
+</html>
