@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Dashboard - CREOVIX</title>
+
+  <link rel="stylesheet" href="styles.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    .dashboard {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .dashboard-header {
+      margin-bottom: 30px;
+    }
+
+    .dashboard-header h1 {
+      font-size: 36px;
+      margin-bottom: 8px;
+    }
+
+    .dashboard-header p {
+      color: #aaa;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 35px;
+    }
+
+    .dashboard-card {
+      background: #111;
+      border: 1px solid #292929;
+      border-radius: 15px;
+      padding: 25px;
+    }
+
+    .dashboard-card h3 {
+      margin-bottom: 10px;
+    }
+
+    .dashboard-card p {
+      color: #aaa;
+      font-size: 14px;
+    }
+
+    .dashboard-card .number {
+      font-size: 30px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .tools {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .tool-card {
+      display: block;
+      text-decoration: none;
+      color: white;
+      background: #111;
+      border: 1px solid #292929;
+      border-radius: 15px;
+      padding: 22px;
+      transition: 0.2s;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-3px);
+      border-color: #555;
+    }
+
+    .tool-card h3 {
+      margin-bottom: 8px;
+    }
+
+    .tool-card p {
+      color: #aaa;
+      font-size: 14px;
+    }
+
+    .logout-btn {
+      background: #222;
+      color: white;
+      border: 1px solid #444;
+      padding: 11px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .logout-btn:hover {
+      background: #333;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+      color: #aaa;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <nav>
+      <a href="index.html">CREOVIX</a>
+
+      <div>
+        <a href="index.html">Home</a>
+        <a href="script-creator.html">Scripts</a>
+        <a href="movie-editing.html">Editing</a>
+        <a href="dashboard.html">Dashboard</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="dashboard">
+
+    <div id="loading" class="loading">
+      Loading your CREOVIX dashboard...
+    </div>
+
+    <section id="dashboardContent" style="display:none;">
+
+      <div class="dashboard-header">
+        <h1>Welcome, <span id="creatorName">Creator</span> 👋</h1>
+        <p>Your CREOVIX creator workspace.</p>
+
+        <button id="logoutBtn" class="logout-btn">
+          Log Out
+        </button>
+      </div>
+
+      <div class="dashboard-grid">
+
+        <div class="dashboard-card">
+          <h3>💰 Earnings</h3>
+          <div class="number">$0.00</div>
+          <p>Your current CREOVIX earnings.</p>
+        </div>
+
+        <div class="dashboard-card">
+          <h3>📝 Scripts</h3>
+          <div class="number" id="scriptCount">0</div>
+          <p>Scripts saved to your account.</p>
+        </div>
+
+        <div class="dashboard-card">
+          <h3>🎬 Clips</h3>
+          <div class="number">0</div>
+          <p>Your uploaded creator clips.</p>
+        </div>
+
+        <div class="dashboard-card">
+          <h3>👤 Account</h3>
+          <div class="number">✓</div>
+          <p>Your CREOVIX account is active.</p>
+        </div>
+
+      </div>
+
+      <h2>Creator Tools</h2>
+
+      <br>
+
+      <div class="tools">
+
+        <a href="script-creator.html" class="tool-card">
+          <h3>🎬 Script Studio</h3>
+          <p>Create and save movie scripts.</p>
+        </a>
+
+        <a href="speech-writer.html" class="tool-card">
+          <h3>🎤 Speech Writer</h3>
+          <p>Create speeches and written content.</p>
+        </a>
+
+        <a href="short-clips.html" class="tool-card">
+          <h3>📱 Short Clips</h3>
+          <p>Create and manage short-form content.</p>
+        </a>
+
+        <a href="movie-editing.html" class="tool-card">
+          <h3>🎞️ Movie Editing</h3>
+          <p>Access your movie editing workspace.</p>
+        </a>
+
+        <a href="clip-visionary.html" class="tool-card">
+          <h3>🚀 Clip Visionary</h3>
+          <p>Upload and manage your creative clips.</p>
+        </a>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+
+    const SUPABASE_URL =
+      "https://sxdfwbvjohzgfaatqxqk.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_Izxu9zWrYhf3rqEUDxInVQ_1qdGoJdQ";
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+
+    async function loadDashboard() {
+
+      const loading =
+        document.getElementById("loading");
+
+      const dashboardContent =
+        document.getElementById("dashboardContent");
+
+      const creatorName =
+        document.getElementById("creatorName");
+
+      const scriptCount =
+        document.getElementById("scriptCount");
+
+
+      const {
+        data: {
+          session
+        },
+        error: sessionError
+      } = await supabaseClient.auth.getSession();
+
+
+      if (sessionError || !session) {
+
+        window.location.href = "login.html";
+
+        return;
+      }
+
+
+      const user = session.user;
+
+
+      const name =
+        user.user_metadata?.creator_name ||
+        user.email?.split("@")[0] ||
+        "Creator";
+
+
+      creatorName.textContent = name;
+
+
+      const {
+        data: scripts,
+        error: scriptsError
+      } = await supabaseClient
+        .from("scripts")
+        .select("id")
+        .eq("user_id", user.id);
+
+
+      if (!scriptsError && scripts) {
+
+        scriptCount.textContent =
+          scripts.length;
+
+      }
+
+
+      loading.style.display = "none";
+
+      dashboardContent.style.display = "block";
+
+    }
+
+
+    document
+      .getElementById("logoutBtn")
+      .addEventListener("click", async () => {
+
+        await supabaseClient.auth.signOut();
+
+        window.location.href = "login.html";
+
+      });
+
+
+    loadDashboard();
+
+  </script>
+
+</body>
+</html>
