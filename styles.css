@@ -1,12 +1,16 @@
 /* =========================================
    CREOVIX
-   Main Website Styles
+   Creator Platform — Main Website Styles
    ========================================= */
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -22,7 +26,7 @@ body {
 
 .top-bar {
   width: 100%;
-  background: #000000;
+  background: rgba(0, 0, 0, 0.96);
   border-bottom: 1px solid #222222;
   padding: 18px 30px;
 
@@ -35,25 +39,29 @@ body {
   z-index: 1000;
 }
 
-/* Logo */
+/* =========================================
+   LOGO
+   ========================================= */
 
 .logo {
   font-size: 25px;
   font-weight: 900;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
   color: #ffffff;
 }
 
-/* Navigation */
+/* =========================================
+   NAVIGATION
+   ========================================= */
 
 nav {
   display: flex;
   align-items: center;
-  gap: 22px;
+  gap: 25px;
 }
 
 nav a {
-  color: #ffffff;
+  color: #bbbbbb;
   text-decoration: none;
   font-size: 15px;
   font-weight: 600;
@@ -65,79 +73,12 @@ nav a:hover {
 }
 
 /* =========================================
-   MAIN SECTION
+   LOGIN BUTTON
    ========================================= */
 
-.section {
-  width: 90%;
-  max-width: 1100px;
-  margin: 60px auto;
-  text-align: center;
-}
-
-.section h2 {
-  font-size: 42px;
-  margin-bottom: 15px;
-  font-weight: 900;
-}
-
-.section > p {
-  color: #aaaaaa;
-  font-size: 17px;
-  margin-bottom: 35px;
-}
-
-/* =========================================
-   CARD
-   ========================================= */
-
-.card {
-  background: #0d0d0d;
-  border: 1px solid #252525;
-  border-radius: 15px;
-  padding: 30px;
-
-  max-width: 850px;
-  margin: 0 auto;
-
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-}
-
-/* =========================================
-   INPUTS
-   ========================================= */
-
-input,
-textarea {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 16px;
-  outline: none;
-}
-
-input {
-  background: #ffffff;
-  color: #000000;
-  border: none;
-  border-radius: 8px;
-}
-
-textarea {
-  resize: vertical;
-}
-
-input:focus,
-textarea:focus {
-  border-color: #00aaff;
-  box-shadow: 0 0 0 2px rgba(0, 170, 255, 0.15);
-}
-
-/* =========================================
-   BUTTON
-   ========================================= */
-
-button {
-  width: 100%;
-  padding: 15px 20px;
+.login-btn {
+  width: auto;
+  padding: 10px 20px;
 
   background: #008cff;
   color: #ffffff;
@@ -145,17 +86,344 @@ button {
   border: none;
   border-radius: 8px;
 
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
 
   cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-btn:hover {
+  background: #006dcc;
+}
+
+/* =========================================
+   HERO
+   ========================================= */
+
+.hero {
+  min-height: 75vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 80px 20px;
+
+  background:
+    radial-gradient(
+      circle at center,
+      #101d29 0%,
+      #050505 55%
+    );
+}
+
+.hero h1 {
+  font-size: clamp(45px, 8vw, 85px);
+  font-weight: 900;
+  letter-spacing: 3px;
+
+  margin-bottom: 20px;
+}
+
+.hero p {
+  max-width: 700px;
+
+  color: #aaaaaa;
+
+  font-size: 18px;
+
+  margin-bottom: 35px;
+}
+
+/* =========================================
+   HERO BUTTONS
+   ========================================= */
+
+.hero-buttons {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.primary-btn,
+.secondary-btn {
+  display: inline-block;
+
+  padding: 13px 24px;
+
+  border-radius: 8px;
+
+  text-decoration: none;
+
+  font-weight: bold;
 
   transition: 0.3s;
 }
 
-button:hover {
+.primary-btn {
+  background: #008cff;
+  color: #ffffff;
+}
+
+.primary-btn:hover {
   background: #006dcc;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+}
+
+.secondary-btn {
+  background: #111111;
+  color: #ffffff;
+
+  border: 1px solid #333333;
+}
+
+.secondary-btn:hover {
+  border-color: #008cff;
+  color: #00aaff;
+}
+
+/* =========================================
+   GENERAL SECTION
+   ========================================= */
+
+.section {
+  width: 90%;
+  max-width: 1150px;
+
+  margin: 80px auto;
+
+  text-align: center;
+}
+
+.section h2 {
+  font-size: 42px;
+
+  margin-bottom: 15px;
+
+  font-weight: 900;
+}
+
+.section > p {
+  color: #aaaaaa;
+
+  font-size: 17px;
+
+  margin-bottom: 40px;
+}
+
+/* =========================================
+   CREATION CARDS
+   ========================================= */
+
+.cards {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 25px;
+
+  margin-top: 35px;
+}
+
+.card {
+  background: #0d0d0d;
+
+  border: 1px solid #252525;
+
+  border-radius: 15px;
+
+  padding: 30px;
+
+  text-align: left;
+
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.5);
+
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+
+  border-color: #008cff;
+
+  box-shadow:
+    0 15px 45px rgba(0, 140, 255, 0.12);
+}
+
+.card h3 {
+  font-size: 23px;
+
+  margin-bottom: 12px;
+}
+
+.card p {
+  color: #999999;
+
+  margin-bottom: 25px;
+
+  font-size: 15px;
+}
+
+.card .primary-btn {
+  text-align: center;
+}
+
+/* =========================================
+   MARKETPLACE
+   ========================================= */
+
+.brand-box {
+  background:
+    linear-gradient(
+      135deg,
+      #101010,
+      #080808
+    );
+
+  border: 1px solid #252525;
+
+  border-radius: 18px;
+
+  padding: 50px 30px;
+
+  box-shadow:
+    0 10px 50px rgba(0, 0, 0, 0.5);
+}
+
+.brand-box h3 {
+  font-size: 32px;
+
+  margin-bottom: 15px;
+}
+
+.brand-box p {
+  max-width: 650px;
+
+  margin: auto;
+
+  color: #999999;
+
+  font-size: 17px;
+}
+
+/* =========================================
+   EARNINGS
+   ========================================= */
+
+.earnings-box {
+  max-width: 650px;
+
+  margin: auto;
+
+  padding: 40px 30px;
+
+  background: #0d0d0d;
+
+  border: 1px solid #252525;
+
+  border-radius: 18px;
+}
+
+.earnings-box h3 {
+  font-size: 55px;
+
+  color: #00aaff;
+
+  margin-bottom: 5px;
+}
+
+.earnings-box > p {
+  color: #888888;
+
+  margin-bottom: 30px;
+}
+
+/* =========================================
+   EARNING ITEMS
+   ========================================= */
+
+.earning-items {
+  text-align: left;
+
+  display: grid;
+
+  gap: 12px;
+}
+
+.earning-items p {
+  background: #111111;
+
+  border: 1px solid #222222;
+
+  border-radius: 8px;
+
+  padding: 12px 15px;
+
+  color: #dddddd;
+}
+
+/* =========================================
+   INPUTS
+   ========================================= */
+
+input,
+textarea,
+select {
+  width: 100%;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size: 16px;
+
+  outline: none;
+}
+
+input,
+textarea,
+select {
+  background: #ffffff;
+
+  color: #000000;
+
+  border: 1px solid #333333;
+
+  border-radius: 8px;
+
+  padding: 12px;
+}
+
+textarea {
+  resize: vertical;
+
+  min-height: 150px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #00aaff;
+
+  box-shadow:
+    0 0 0 2px rgba(0, 170, 255, 0.15);
+}
+
+/* =========================================
+   BUTTON
+   ========================================= */
+
+button {
+  font-family: Arial, Helvetica, sans-serif;
+
+  cursor: pointer;
+
+  transition: 0.3s;
 }
 
 button:active {
@@ -168,25 +436,31 @@ button:active {
 
 footer {
   text-align: center;
-  padding: 30px 20px;
-  margin-top: 80px;
+
+  padding: 35px 20px;
+
+  margin-top: 100px;
 
   background: #000000;
+
   border-top: 1px solid #222222;
 
   color: #777777;
+
   font-size: 14px;
 }
 
 /* =========================================
-   MOBILE PHONE DESIGN
+   TABLET
    ========================================= */
 
 @media (max-width: 768px) {
 
   .top-bar {
     padding: 15px;
-    flex-direction: column;
+
+    flex-wrap: wrap;
+
     gap: 15px;
   }
 
@@ -195,46 +469,74 @@ footer {
   }
 
   nav {
-    width: 100%;
-    display: flex;
+    order: 3;
 
-    gap: 10px;
+    width: 100%;
 
     overflow-x: auto;
+
+    gap: 8px;
+
     white-space: nowrap;
 
-    padding-bottom: 5px;
+    padding-bottom: 3px;
   }
 
   nav a {
     font-size: 13px;
-    padding: 8px 10px;
+
+    padding: 8px 11px;
+
     background: #111111;
+
     border-radius: 6px;
+  }
+
+  .login-btn {
+    padding: 9px 16px;
+  }
+
+  .hero {
+    min-height: 65vh;
+
+    padding: 70px 18px;
+  }
+
+  .hero h1 {
+    font-size: 48px;
+  }
+
+  .hero p {
+    font-size: 16px;
   }
 
   .section {
     width: 94%;
-    margin: 40px auto;
+
+    margin: 60px auto;
   }
 
   .section h2 {
     font-size: 32px;
   }
 
-  .section > p {
-    font-size: 15px;
+  .cards {
+    grid-template-columns: 1fr;
+
+    gap: 18px;
   }
 
   .card {
-    padding: 20px;
+    padding: 25px;
   }
 
-  input,
-  textarea {
-    font-size: 15px;
+  .brand-box {
+    padding: 35px 20px;
   }
 
+  .earnings-box {
+    padding: 30px 20px;
+  }
 }
 
 /* =========================================
@@ -243,21 +545,56 @@ footer {
 
 @media (max-width: 480px) {
 
+  .top-bar {
+    padding: 12px;
+  }
+
+  .logo {
+    font-size: 20px;
+
+    letter-spacing: 2px;
+  }
+
+  .hero {
+    padding: 60px 15px;
+  }
+
+  .hero h1 {
+    font-size: 38px;
+
+    letter-spacing: 1px;
+  }
+
+  .hero p {
+    font-size: 15px;
+  }
+
+  .hero-buttons {
+    width: 100%;
+
+    flex-direction: column;
+  }
+
+  .primary-btn,
+  .secondary-btn {
+    width: 100%;
+
+    text-align: center;
+  }
+
   .section h2 {
     font-size: 28px;
   }
 
   .card {
-    padding: 15px;
+    padding: 20px;
   }
 
-  nav {
-    gap: 6px;
+  .card h3 {
+    font-size: 20px;
   }
 
-  nav a {
-    font-size: 12px;
-    padding: 7px 8px;
+  .earnings-box h3 {
+    font-size: 45px;
   }
-
 }
