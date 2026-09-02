@@ -68,6 +68,11 @@
       cursor: pointer;
     }
 
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
     .download-btn:hover,
     button:hover {
       opacity: 0.85;
@@ -85,6 +90,20 @@
       border-radius: 10px;
       margin-top: 15px;
     }
+
+    .success {
+      color: #00d084;
+    }
+
+    .error {
+      color: #ff6b6b;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 30px 10px;
+      color: #888;
+    }
   </style>
 </head>
 
@@ -96,4 +115,688 @@
 
   <nav>
     <a href="index.html">Home</a>
-    <a href="script
+    <a href="script-creator.html">Scripts</a>
+    <a href="speech-writer.html">Speeches</a>
+    <a href="short-clips.html">Short Clips</a>
+    <a href="movie-editing.html">Movie Editing</a>
+    <a href="clip-visionary.html">Clip Visionary</a>
+  </nav>
+
+</header>
+
+
+<section class="section">
+
+  <h2>🎬 Clip Visionary</h2>
+
+  <p>
+    Upload, discover and download free editing clips on CREOVIX.
+  </p>
+
+  <div id="loginStatus"></div>
+
+
+  <!-- UPLOAD -->
+
+  <div class="card">
+
+    <h3>📤 Upload a Clip</h3>
+
+    <div class="upload-box">
+
+      <input
+        id="clipTitle"
+        type="text"
+        placeholder="Clip title"
+      >
+
+      <input
+        id="clipCategory"
+        type="text"
+        placeholder="Category e.g. Cinematic, Action, Comedy"
+      >
+
+      <input
+        id="creatorName"
+        type="text"
+        placeholder="Your creator name"
+      >
+
+      <input
+        id="clipFile"
+        type="file"
+        accept="video/*"
+      >
+
+      <button
+        id="uploadButton"
+        type="button"
+      >
+        📤 Upload Clip
+      </button>
+
+      <p id="status" class="status"></p>
+
+    </div>
+
+  </div>
+
+
+  <!-- CLIP LIBRARY -->
+
+  <div class="card">
+
+    <h3>🔥 Clip Library</h3>
+
+    <div id="clipsContainer">
+
+      <p class="status">
+        ⏳ Loading clips...
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<footer>
+
+  <p>
+    © 2026 CREOVIX. All rights reserved.
+  </p>
+
+</footer>
+
+
+<script>
+
+/* =========================================
+   SUPABASE
+   ========================================= */
+
+const SUPABASE_URL =
+  "https://sxdfwbvjohzgfaatqxqk.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_Izxu9zWrYhf3rqEUDxInVQ_1qdGoJdQ";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+let currentUser = null;
+
+
+/* =========================================
+   ELEMENTS
+   ========================================= */
+
+const loginStatus =
+  document.getElementById("loginStatus");
+
+const creatorNameInput =
+  document.getElementById("creatorName");
+
+const uploadButton =
+  document.getElementById("uploadButton");
+
+const status =
+  document.getElementById("status");
+
+const clipsContainer =
+  document.getElementById("clipsContainer");
+
+
+/* =========================================
+   ESCAPE HTML
+   ========================================= */
+
+function escapeHTML(text) {
+
+  const div =
+    document.createElement("div");
+
+  div.textContent =
+    text == null ? "" : String(text);
+
+  return div.innerHTML;
+}
+
+
+/* =========================================
+   CHECK LOGIN
+   ========================================= */
+
+async function checkLogin() {
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.auth.getSession();
+
+  if (error) {
+
+    console.error(
+      "Session error:",
+      error
+    );
+
+    loginStatus.innerHTML =
+      `<div class="login-warning">
+        ❌ Unable to check your login.
+        <br><br>
+        <a href="login.html">
+          Go to Login →
+        </a>
+      </div>`;
+
+    uploadButton.disabled = true;
+
+    return;
+  }
+
+
+  currentUser =
+    data.session
+      ? data.session.user
+      : null;
+
+
+  if (!currentUser) {
+
+    loginStatus.innerHTML =
+      `<div class="login-warning">
+        Please log in to upload clips.
+        <br><br>
+        <a href="login.html">
+          Go to Login →
+        </a>
+      </div>`;
+
+    uploadButton.disabled = true;
+
+    return;
+  }
+
+
+  const metadata =
+    currentUser.user_metadata || {};
+
+
+  const creator =
+    metadata.creator_name ||
+    currentUser.email.split("@")[0];
+
+
+  creatorNameInput.value =
+    creator;
+
+
+  loginStatus.innerHTML =
+    `<p class="status success">
+      ✓ Logged in as
+      <strong>
+        ${escapeHTML(creator)}
+      </strong>
+    </p>`;
+
+
+  uploadButton.disabled = false;
+}
+
+
+/* =========================================
+   UPLOAD CLIP
+   ========================================= */
+
+async function uploadClip() {
+
+  status.className =
+    "status";
+
+
+  if (!currentUser) {
+
+    status.textContent =
+      "❌ Please log in before uploading.";
+
+    return;
+  }
+
+
+  const title =
+    document.getElementById(
+      "clipTitle"
+    ).value.trim();
+
+
+  const category =
+    document.getElementById(
+      "clipCategory"
+    ).value.trim();
+
+
+  const creator =
+    creatorNameInput.value.trim();
+
+
+  const fileInput =
+    document.getElementById(
+      "clipFile"
+    );
+
+
+  const file =
+    fileInput.files[0];
+
+
+  if (!title) {
+
+    status.textContent =
+      "❌ Please enter a clip title.";
+
+    return;
+  }
+
+
+  if (!file) {
+
+    status.textContent =
+      "❌ Please choose a video.";
+
+    return;
+  }
+
+
+  if (!file.type.startsWith("video/")) {
+
+    status.textContent =
+      "❌ Please choose a video file.";
+
+    return;
+  }
+
+
+  /* Maximum 100 MB */
+
+  if (file.size > 100 * 1024 * 1024) {
+
+    status.textContent =
+      "❌ Video must be smaller than 100 MB.";
+
+    return;
+  }
+
+
+  uploadButton.disabled = true;
+
+  status.textContent =
+    "⏳ Uploading your clip...";
+
+
+  try {
+
+    const safeName =
+      file.name.replace(
+        /[^a-zA-Z0-9._-]/g,
+        "_"
+      );
+
+
+    /*
+      Use the logged-in user's folder.
+      This does NOT require a user_id
+      database column.
+    */
+
+    const filePath =
+      currentUser.id +
+      "/" +
+      Date.now() +
+      "-" +
+      Math.random()
+        .toString(36)
+        .substring(2) +
+      "-" +
+      safeName;
+
+
+    /* ==============================
+       UPLOAD VIDEO TO STORAGE
+       ============================== */
+
+    const {
+      error: uploadError
+    } =
+      await supabaseClient
+        .storage
+        .from("Clips")
+        .upload(
+          filePath,
+          file,
+          {
+            cacheControl: "3600",
+            upsert: false,
+            contentType: file.type
+          }
+        );
+
+
+    if (uploadError) {
+
+      throw new Error(
+        "Storage upload failed: " +
+        uploadError.message
+      );
+    }
+
+
+    /* ==============================
+       SAVE CLIP INFORMATION
+       IMPORTANT:
+       No user_id column required.
+       ============================== */
+
+    const {
+      error: databaseError
+    } =
+      await supabaseClient
+        .from("clips")
+        .insert({
+
+          title:
+            title,
+
+          category:
+            category || "General",
+
+          creator_name:
+            creator ||
+            "CREOVIX Creator",
+
+          file_path:
+            filePath
+
+        });
+
+
+    if (databaseError) {
+
+      console.error(
+        "Database error:",
+        databaseError
+      );
+
+
+      /*
+        Remove the uploaded file if
+        the database record fails.
+      */
+
+      await supabaseClient
+        .storage
+        .from("Clips")
+        .remove([
+          filePath
+        ]);
+
+
+      throw new Error(
+        "Database save failed: " +
+        databaseError.message
+      );
+    }
+
+
+    /* ==============================
+       SUCCESS
+       ============================== */
+
+    status.className =
+      "status success";
+
+    status.textContent =
+      "✅ Clip uploaded successfully!";
+
+
+    document.getElementById(
+      "clipTitle"
+    ).value = "";
+
+
+    document.getElementById(
+      "clipCategory"
+    ).value = "";
+
+
+    fileInput.value = "";
+
+
+    await loadClips();
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Upload error:",
+      error
+    );
+
+
+    status.className =
+      "status error";
+
+
+    status.textContent =
+      "❌ " +
+      error.message;
+
+  }
+
+  finally {
+
+    uploadButton.disabled =
+      !currentUser;
+
+  }
+}
+
+
+/* =========================================
+   LOAD CLIPS
+   ========================================= */
+
+async function loadClips() {
+
+  clipsContainer.innerHTML =
+    `<p class="status">
+      ⏳ Loading clips...
+    </p>`;
+
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("clips")
+        .select(
+          "id, title, category, creator_name, file_path, created_at"
+        )
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        );
+
+
+    if (error) {
+
+      console.error(
+        "Clip library error:",
+        error
+      );
+
+
+      clipsContainer.innerHTML =
+        `<p class="status error">
+          ❌ Unable to load clips.
+          <br><br>
+          ${escapeHTML(
+            error.message
+          )}
+        </p>`;
+
+      return;
+    }
+
+
+    if (!data || data.length === 0) {
+
+      clipsContainer.innerHTML =
+        `<div class="empty">
+          <h3>🎬 No clips yet</h3>
+          <p>
+            Be the first creator to upload a clip.
+          </p>
+        </div>`;
+
+      return;
+    }
+
+
+    clipsContainer.innerHTML = "";
+
+
+    data.forEach(
+      function(clip) {
+
+        const {
+          data: publicData
+        } =
+          supabaseClient
+            .storage
+            .from("Clips")
+            .getPublicUrl(
+              clip.file_path
+            );
+
+
+        const publicURL =
+          publicData.publicUrl;
+
+
+        const card =
+          document.createElement(
+            "div"
+          );
+
+
+        card.className =
+          "clip-card";
+
+
+        card.innerHTML = `
+
+          <div class="clip-info">
+
+            <h3>
+              🎥 ${escapeHTML(
+                clip.title ||
+                "Untitled Clip"
+              )}
+            </h3>
+
+            <p>
+              Category:
+              ${escapeHTML(
+                clip.category ||
+                "General"
+              )}
+            </p>
+
+            <p>
+              Creator:
+              ${escapeHTML(
+                clip.creator_name ||
+                "CREOVIX Creator"
+              )}
+            </p>
+
+          </div>
+
+          <video
+            controls
+            preload="metadata"
+            src="${escapeHTML(publicURL)}"
+          ></video>
+
+          <a
+            class="download-btn"
+            href="${escapeHTML(publicURL)}"
+            download
+          >
+            ⬇️ Download Clip
+          </a>
+
+        `;
+
+
+        clipsContainer.appendChild(
+          card
+        );
+
+      }
+    );
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Library error:",
+      error
+    );
+
+
+    clipsContainer.innerHTML =
+      `<p class="status error">
+        ❌ Something went wrong while loading clips.
+      </p>`;
+
+  }
+}
+
+
+/* =========================================
+   BUTTON
+   ========================================= */
+
+uploadButton.addEventListener(
+  "click",
+  uploadClip
+);
+
+
+/* =========================================
+   START
+   ========================================= */
+
+checkLogin();
+
+loadClips();
+
+</script>
+
+</body>
+</html>
