@@ -11,6 +11,11 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
     .profile-page {
       max-width: 900px;
       margin: 40px auto;
@@ -19,24 +24,24 @@
 
     .profile-card {
       background: #111;
-      border: 1px solid #333;
+      color: white;
       border-radius: 18px;
       padding: 30px;
       text-align: center;
+      border: 1px solid #333;
     }
 
     .profile-avatar {
-      width: 110px;
-      height: 110px;
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
       object-fit: cover;
-      background: #222;
-      border: 3px solid #fff;
+      border: 3px solid white;
       margin-bottom: 15px;
     }
 
     .profile-card h1 {
-      margin-bottom: 5px;
+      margin: 5px 0;
     }
 
     .profile-email {
@@ -44,73 +49,123 @@
       margin-bottom: 25px;
     }
 
-    .profile-form {
+    .profile-info {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin: 25px 0;
+    }
+
+    .stat {
+      background: #1b1b1b;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 18px;
+    }
+
+    .stat-number {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .stat-label {
+      color: #aaa;
+      font-size: 13px;
+      margin-top: 5px;
+    }
+
+    .profile-section {
       text-align: left;
       margin-top: 25px;
     }
 
-    .profile-form label {
+    .profile-section h3 {
+      margin-bottom: 8px;
+    }
+
+    .profile-section p {
+      color: #ccc;
+      line-height: 1.6;
+    }
+
+    .edit-box {
+      margin-top: 30px;
+      text-align: left;
+    }
+
+    .edit-box label {
       display: block;
-      margin: 15px 0 7px;
+      margin-top: 15px;
+      margin-bottom: 6px;
       font-weight: bold;
     }
 
-    .profile-form input,
-    .profile-form textarea {
+    .edit-box input,
+    .edit-box textarea {
       width: 100%;
-      padding: 13px;
-      border-radius: 10px;
+      box-sizing: border-box;
+      padding: 12px;
+      border-radius: 8px;
       border: 1px solid #444;
-      background: #050505;
-      color: #fff;
-      font-size: 16px;
+      background: #1b1b1b;
+      color: white;
+      font-size: 15px;
     }
 
-    .profile-form textarea {
-      min-height: 120px;
+    .edit-box textarea {
+      min-height: 100px;
       resize: vertical;
     }
 
-    .save-profile {
+    .save-button {
       width: 100%;
       margin-top: 20px;
       padding: 14px;
       border: none;
-      border-radius: 10px;
-      background: #fff;
-      color: #000;
-      font-size: 16px;
+      border-radius: 8px;
+      background: white;
+      color: black;
       font-weight: bold;
       cursor: pointer;
+      font-size: 15px;
     }
 
-    .save-profile:hover {
-      opacity: 0.9;
+    .save-button:hover {
+      opacity: 0.85;
     }
 
     .message {
       margin-top: 15px;
-      text-align: center;
       font-weight: bold;
-      min-height: 24px;
     }
 
-    .back-dashboard {
+    .back-link {
       display: inline-block;
       margin-top: 20px;
-      color: #fff;
+      color: white;
       text-decoration: none;
     }
 
-    .back-dashboard:hover {
-      text-decoration: underline;
+    @media (max-width: 650px) {
+      .profile-info {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-page {
+        margin: 20px auto;
+        padding: 12px;
+      }
+
+      .profile-card {
+        padding: 20px;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <header class="site-header">
+  <header>
     <div class="logo">CREOVIX</div>
 
     <nav>
@@ -126,67 +181,105 @@
     <div class="profile-card">
 
       <img
-        id="profileAvatar"
+        id="avatar"
         class="profile-avatar"
-        src="https://via.placeholder.com/110"
+        src="https://via.placeholder.com/120"
         alt="Creator Profile"
       >
 
-      <h1 id="profileName">Creator</h1>
+      <h1 id="displayName">Creator</h1>
 
-      <p id="profileEmail" class="profile-email"></p>
+      <div id="displayEmail" class="profile-email">
+        Loading...
+      </div>
 
-      <form id="profileForm" class="profile-form">
+      <div class="profile-info">
+
+        <div class="stat">
+          <div id="scriptCount" class="stat-number">0</div>
+          <div class="stat-label">Scripts</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-number">0</div>
+          <div class="stat-label">Clips</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-number">$0.00</div>
+          <div class="stat-label">Earnings</div>
+        </div>
+
+      </div>
+
+      <div class="profile-section">
+        <h3>About</h3>
+        <p id="displayBio">
+          Tell people about yourself and your creative journey.
+        </p>
+      </div>
+
+      <div class="profile-section">
+        <h3>Creative Skills</h3>
+        <p id="displaySkills">
+          Add your creative skills below.
+        </p>
+      </div>
+
+      <div class="profile-section">
+        <h3>Website / Social</h3>
+        <p id="displayWebsite">
+          No link added.
+        </p>
+      </div>
+
+      <div class="edit-box">
+
+        <h2>Edit Creator Profile</h2>
 
         <label for="creatorName">Creator Name</label>
-
         <input
-          type="text"
           id="creatorName"
-          placeholder="Enter your creator name"
-          required
+          type="text"
+          placeholder="Your creator name"
         >
 
         <label for="bio">Bio</label>
-
         <textarea
           id="bio"
-          placeholder="Tell people about yourself and your creative work..."
+          placeholder="Tell people about yourself..."
         ></textarea>
 
         <label for="skills">Creative Skills</label>
-
         <input
-          type="text"
           id="skills"
-          placeholder="Example: Music, Video Editing, Photography"
+          type="text"
+          placeholder="Music, Writing, Video Editing..."
         >
 
         <label for="website">Website / Social Link</label>
-
         <input
-          type="url"
           id="website"
-          placeholder="https://example.com"
-        >
-
-        <label for="avatar">Profile Image URL</label>
-
-        <input
           type="url"
-          id="avatar"
-          placeholder="Paste your image URL"
+          placeholder="https://..."
         >
 
-        <button type="submit" class="save-profile">
+        <label for="avatarUrl">Profile Image URL</label>
+        <input
+          id="avatarUrl"
+          type="url"
+          placeholder="https://..."
+        >
+
+        <button id="saveProfile" class="save-button">
           Save Creator Profile
         </button>
 
         <div id="message" class="message"></div>
 
-      </form>
+      </div>
 
-      <a href="dashboard.html" class="back-dashboard">
+      <a href="dashboard.html" class="back-link">
         ← Back to Dashboard
       </a>
 
@@ -208,9 +301,23 @@
         SUPABASE_KEY
       );
 
+    const avatar =
+      document.getElementById("avatar");
 
-    const profileForm =
-      document.getElementById("profileForm");
+    const displayName =
+      document.getElementById("displayName");
+
+    const displayEmail =
+      document.getElementById("displayEmail");
+
+    const displayBio =
+      document.getElementById("displayBio");
+
+    const displaySkills =
+      document.getElementById("displaySkills");
+
+    const displayWebsite =
+      document.getElementById("displayWebsite");
 
     const creatorName =
       document.getElementById("creatorName");
@@ -224,173 +331,94 @@
     const website =
       document.getElementById("website");
 
-    const avatar =
-      document.getElementById("avatar");
-
-    const profileName =
-      document.getElementById("profileName");
-
-    const profileEmail =
-      document.getElementById("profileEmail");
-
-    const profileAvatar =
-      document.getElementById("profileAvatar");
+    const avatarUrl =
+      document.getElementById("avatarUrl");
 
     const message =
       document.getElementById("message");
 
-
     async function loadProfile() {
 
       const {
-        data: { session },
-        error: sessionError
+        data: { session }
       } = await supabaseClient.auth.getSession();
 
-
-      if (sessionError) {
-
-        message.textContent =
-          "❌ Unable to load your account.";
-
-        console.error(sessionError);
-
-        return;
-      }
-
-
       if (!session) {
-
         window.location.href = "login.html";
-
         return;
       }
-
 
       const user = session.user;
 
+      const metadata = user.user_metadata || {};
 
-      const savedName =
-        user.user_metadata?.creator_name ||
+      const name =
+        metadata.creator_name ||
         user.email.split("@")[0];
 
+      displayName.textContent = name;
+      displayEmail.textContent = user.email;
 
       creatorName.value =
-        savedName;
+        metadata.creator_name || "";
 
-      profileName.textContent =
-        savedName;
+      bio.value =
+        metadata.bio || "";
 
-      profileEmail.textContent =
-        user.email;
+      skills.value =
+        metadata.skills || "";
 
+      website.value =
+        metadata.website || "";
 
-      if (user.user_metadata?.bio) {
+      avatarUrl.value =
+        metadata.avatar || "";
 
-        bio.value =
-          user.user_metadata.bio;
+      displayBio.textContent =
+        metadata.bio ||
+        "Tell people about yourself and your creative journey.";
 
-      }
+      displaySkills.textContent =
+        metadata.skills ||
+        "Add your creative skills below.";
 
+      if (metadata.website) {
 
-      if (user.user_metadata?.skills) {
+        displayWebsite.innerHTML =
+          `<a href="${metadata.website}" target="_blank">
+            ${metadata.website}
+          </a>`;
 
-        skills.value =
-          user.user_metadata.skills;
+      } else {
 
-      }
-
-
-      if (user.user_metadata?.website) {
-
-        website.value =
-          user.user_metadata.website;
-
-      }
-
-
-      if (user.user_metadata?.avatar) {
-
-        avatar.value =
-          user.user_metadata.avatar;
-
-        profileAvatar.src =
-          user.user_metadata.avatar;
+        displayWebsite.textContent =
+          "No link added.";
 
       }
 
+      if (metadata.avatar) {
+        avatar.src = metadata.avatar;
+      }
+
+      loadScriptCount(user.id);
     }
 
 
-    profileForm.addEventListener(
-      "submit",
-      async function(event) {
+    async function loadScriptCount(userId) {
 
-        event.preventDefault();
+      const {
+        count,
+        error
+      } = await supabaseClient
+        .from("scripts")
+        .select("*", {
+          count: "exact",
+          head: true
+        })
+        .eq("user_id", userId);
 
+      if (!error) {
 
-        message.textContent =
-          "Saving profile...";
-
-
-        const {
-          error
-        } = await supabaseClient.auth.updateUser({
-
-          data: {
-
-            creator_name:
-              creatorName.value.trim(),
-
-            bio:
-              bio.value.trim(),
-
-            skills:
-              skills.value.trim(),
-
-            website:
-              website.value.trim(),
-
-            avatar:
-              avatar.value.trim()
-
-          }
-
-        });
-
-
-        if (error) {
-
-          message.textContent =
-            "❌ " + error.message;
-
-          console.error(error);
-
-          return;
-        }
-
-
-        profileName.textContent =
-          creatorName.value.trim();
-
-
-        if (avatar.value.trim()) {
-
-          profileAvatar.src =
-            avatar.value.trim();
-
-        }
-
-
-        message.textContent =
-          "✓ Creator profile saved successfully!";
-
-    });
-
-
-    loadProfile();
-
-  </script>
-
-</body>
-</html>
+        document.getElementById(
+          "scriptCount"
+        ).textContent = count ||
