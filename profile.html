@@ -38,6 +38,7 @@
       object-fit: cover;
       border: 3px solid white;
       margin-bottom: 15px;
+      background: #222;
     }
 
     .profile-card h1 {
@@ -86,11 +87,18 @@
     .profile-section p {
       color: #ccc;
       line-height: 1.6;
+      word-break: break-word;
+    }
+
+    .profile-section a {
+      color: white;
     }
 
     .edit-box {
       margin-top: 30px;
       text-align: left;
+      border-top: 1px solid #333;
+      padding-top: 25px;
     }
 
     .edit-box label {
@@ -137,6 +145,7 @@
     .message {
       margin-top: 15px;
       font-weight: bold;
+      text-align: center;
     }
 
     .back-link {
@@ -165,229 +174,397 @@
 
 <body>
 
-  <header>
-    <div class="logo">CREOVIX</div>
+<header>
+  <div class="logo">CREOVIX</div>
 
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="script-creator.html">Scripts</a>
-      <a href="movie-editing.html">Editing</a>
-      <a href="dashboard.html">Dashboard</a>
-    </nav>
-  </header>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="script-creator.html">Scripts</a>
+    <a href="movie-editing.html">Editing</a>
+    <a href="dashboard.html">Dashboard</a>
+  </nav>
+</header>
 
-  <main class="profile-page">
+<main class="profile-page">
 
-    <div class="profile-card">
+  <div class="profile-card">
 
-      <img
-        id="avatar"
-        class="profile-avatar"
-        src="https://via.placeholder.com/120"
-        alt="Creator Profile"
-      >
+    <img
+      id="avatar"
+      class="profile-avatar"
+      src="https://via.placeholder.com/120"
+      alt="Creator Profile"
+    >
 
-      <h1 id="displayName">Creator</h1>
+    <h1 id="displayName">Creator</h1>
 
-      <div id="displayEmail" class="profile-email">
-        Loading...
+    <div id="displayEmail" class="profile-email">
+      Loading...
+    </div>
+
+    <div class="profile-info">
+
+      <div class="stat">
+        <div id="scriptCount" class="stat-number">0</div>
+        <div class="stat-label">Scripts</div>
       </div>
 
-      <div class="profile-info">
-
-        <div class="stat">
-          <div id="scriptCount" class="stat-number">0</div>
-          <div class="stat-label">Scripts</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-number">0</div>
-          <div class="stat-label">Clips</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-number">$0.00</div>
-          <div class="stat-label">Earnings</div>
-        </div>
-
+      <div class="stat">
+        <div id="clipCount" class="stat-number">0</div>
+        <div class="stat-label">Clips</div>
       </div>
 
-      <div class="profile-section">
-        <h3>About</h3>
-        <p id="displayBio">
-          Tell people about yourself and your creative journey.
-        </p>
+      <div class="stat">
+        <div class="stat-number">$0.00</div>
+        <div class="stat-label">Earnings</div>
       </div>
-
-      <div class="profile-section">
-        <h3>Creative Skills</h3>
-        <p id="displaySkills">
-          Add your creative skills below.
-        </p>
-      </div>
-
-      <div class="profile-section">
-        <h3>Website / Social</h3>
-        <p id="displayWebsite">
-          No link added.
-        </p>
-      </div>
-
-      <div class="edit-box">
-
-        <h2>Edit Creator Profile</h2>
-
-        <label for="creatorName">Creator Name</label>
-        <input
-          id="creatorName"
-          type="text"
-          placeholder="Your creator name"
-        >
-
-        <label for="bio">Bio</label>
-        <textarea
-          id="bio"
-          placeholder="Tell people about yourself..."
-        ></textarea>
-
-        <label for="skills">Creative Skills</label>
-        <input
-          id="skills"
-          type="text"
-          placeholder="Music, Writing, Video Editing..."
-        >
-
-        <label for="website">Website / Social Link</label>
-        <input
-          id="website"
-          type="url"
-          placeholder="https://..."
-        >
-
-        <label for="avatarUrl">Profile Image URL</label>
-        <input
-          id="avatarUrl"
-          type="url"
-          placeholder="https://..."
-        >
-
-        <button id="saveProfile" class="save-button">
-          Save Creator Profile
-        </button>
-
-        <div id="message" class="message"></div>
-
-      </div>
-
-      <a href="dashboard.html" class="back-link">
-        ← Back to Dashboard
-      </a>
 
     </div>
 
-  </main>
+    <div class="profile-section">
+      <h3>About</h3>
+      <p id="displayBio">
+        Tell people about yourself and your creative journey.
+      </p>
+    </div>
 
-  <script>
+    <div class="profile-section">
+      <h3>Creative Skills</h3>
+      <p id="displaySkills">
+        Add your creative skills below.
+      </p>
+    </div>
 
-    const SUPABASE_URL =
-      "https://sxdfwbvjohzgfaatqxqk.supabase.co";
+    <div class="profile-section">
+      <h3>Website / Social</h3>
+      <p id="displayWebsite">
+        No link added.
+      </p>
+    </div>
 
-    const SUPABASE_KEY =
-      "sb_publishable_Izxu9zWrYhf3rqEUDxInVQ_1qdGoJdQ";
+    <div class="edit-box">
 
-    const supabaseClient =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-      );
+      <h2>Edit Creator Profile</h2>
 
-    const avatar =
-      document.getElementById("avatar");
+      <label for="creatorName">Creator Name</label>
 
-    const displayName =
-      document.getElementById("displayName");
+      <input
+        id="creatorName"
+        type="text"
+        placeholder="Your creator name"
+      >
 
-    const displayEmail =
-      document.getElementById("displayEmail");
+      <label for="bio">Bio</label>
 
-    const displayBio =
-      document.getElementById("displayBio");
+      <textarea
+        id="bio"
+        placeholder="Tell people about yourself..."
+      ></textarea>
 
-    const displaySkills =
-      document.getElementById("displaySkills");
+      <label for="skills">Creative Skills</label>
 
-    const displayWebsite =
-      document.getElementById("displayWebsite");
+      <input
+        id="skills"
+        type="text"
+        placeholder="Music, Writing, Video Editing..."
+      >
 
-    const creatorName =
-      document.getElementById("creatorName");
+      <label for="website">Website / Social Link</label>
 
-    const bio =
-      document.getElementById("bio");
+      <input
+        id="website"
+        type="url"
+        placeholder="https://..."
+      >
 
-    const skills =
-      document.getElementById("skills");
+      <label for="avatarUrl">Profile Image URL</label>
 
-    const website =
-      document.getElementById("website");
+      <input
+        id="avatarUrl"
+        type="url"
+        placeholder="https://..."
+      >
 
-    const avatarUrl =
-      document.getElementById("avatarUrl");
+      <button id="saveProfile" class="save-button">
+        Save Creator Profile
+      </button>
 
-    const message =
-      document.getElementById("message");
+      <div id="message" class="message"></div>
 
-    async function loadProfile() {
+    </div>
+
+    <a href="dashboard.html" class="back-link">
+      ← Back to Dashboard
+    </a>
+
+  </div>
+
+</main>
+
+<script>
+
+const SUPABASE_URL =
+  "https://sxdfwbvjohzgfaatqxqk.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_Izxu9zWrYhf3rqEUDxInVQ_1qdGoJdQ";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+const avatar =
+  document.getElementById("avatar");
+
+const displayName =
+  document.getElementById("displayName");
+
+const displayEmail =
+  document.getElementById("displayEmail");
+
+const displayBio =
+  document.getElementById("displayBio");
+
+const displaySkills =
+  document.getElementById("displaySkills");
+
+const displayWebsite =
+  document.getElementById("displayWebsite");
+
+const creatorName =
+  document.getElementById("creatorName");
+
+const bio =
+  document.getElementById("bio");
+
+const skills =
+  document.getElementById("skills");
+
+const website =
+  document.getElementById("website");
+
+const avatarUrl =
+  document.getElementById("avatarUrl");
+
+const message =
+  document.getElementById("message");
+
+
+async function loadProfile() {
+
+  const {
+    data: { session }
+  } = await supabaseClient.auth.getSession();
+
+  if (!session) {
+
+    window.location.href =
+      "login.html";
+
+    return;
+  }
+
+  const user = session.user;
+
+  const metadata =
+    user.user_metadata || {};
+
+  const name =
+    metadata.creator_name ||
+    user.email.split("@")[0];
+
+
+  displayName.textContent =
+    name;
+
+  displayEmail.textContent =
+    user.email;
+
+
+  creatorName.value =
+    metadata.creator_name || "";
+
+  bio.value =
+    metadata.bio || "";
+
+  skills.value =
+    metadata.skills || "";
+
+  website.value =
+    metadata.website || "";
+
+  avatarUrl.value =
+    metadata.avatar || "";
+
+
+  displayBio.textContent =
+    metadata.bio ||
+    "Tell people about yourself and your creative journey.";
+
+
+  displaySkills.textContent =
+    metadata.skills ||
+    "Add your creative skills below.";
+
+
+  if (metadata.website) {
+
+    displayWebsite.innerHTML =
+      `<a href="${metadata.website}"
+          target="_blank"
+          rel="noopener noreferrer">
+          ${metadata.website}
+       </a>`;
+
+  } else {
+
+    displayWebsite.textContent =
+      "No link added.";
+
+  }
+
+
+  if (metadata.avatar) {
+
+    avatar.src =
+      metadata.avatar;
+
+  }
+
+
+  await loadScriptCount(user.id);
+
+}
+
+
+async function loadScriptCount(userId) {
+
+  const {
+    count,
+    error
+  } = await supabaseClient
+    .from("scripts")
+    .select("*", {
+      count: "exact",
+      head: true
+    })
+    .eq("user_id", userId);
+
+
+  if (!error) {
+
+    document.getElementById(
+      "scriptCount"
+    ).textContent =
+      count || 0;
+
+  }
+
+}
+
+
+async function loadClipCount(userId) {
+
+  /*
+    Clips can be connected here when
+    the clips table is fully configured.
+  */
+
+  document.getElementById(
+    "clipCount"
+  ).textContent = "0";
+
+}
+
+
+document
+  .getElementById("saveProfile")
+  .addEventListener(
+    "click",
+    async function () {
+
+      message.textContent =
+        "Saving...";
+
+
+      const newName =
+        creatorName.value.trim();
+
+      const newBio =
+        bio.value.trim();
+
+      const newSkills =
+        skills.value.trim();
+
+      const newWebsite =
+        website.value.trim();
+
+      const newAvatar =
+        avatarUrl.value.trim();
+
 
       const {
-        data: { session }
-      } = await supabaseClient.auth.getSession();
+        error
+      } =
+        await supabaseClient.auth.updateUser({
 
-      if (!session) {
-        window.location.href = "login.html";
+          data: {
+
+            creator_name:
+              newName,
+
+            bio:
+              newBio,
+
+            skills:
+              newSkills,
+
+            website:
+              newWebsite,
+
+            avatar:
+              newAvatar
+
+          }
+
+        });
+
+
+      if (error) {
+
+        message.textContent =
+          "❌ " + error.message;
+
         return;
+
       }
 
-      const user = session.user;
 
-      const metadata = user.user_metadata || {};
+      displayName.textContent =
+        newName || "Creator";
 
-      const name =
-        metadata.creator_name ||
-        user.email.split("@")[0];
-
-      displayName.textContent = name;
-      displayEmail.textContent = user.email;
-
-      creatorName.value =
-        metadata.creator_name || "";
-
-      bio.value =
-        metadata.bio || "";
-
-      skills.value =
-        metadata.skills || "";
-
-      website.value =
-        metadata.website || "";
-
-      avatarUrl.value =
-        metadata.avatar || "";
 
       displayBio.textContent =
-        metadata.bio ||
+        newBio ||
         "Tell people about yourself and your creative journey.";
 
+
       displaySkills.textContent =
-        metadata.skills ||
+        newSkills ||
         "Add your creative skills below.";
 
-      if (metadata.website) {
+
+      if (newWebsite) {
 
         displayWebsite.innerHTML =
-          `<a href="${metadata.website}" target="_blank">
-            ${metadata.website}
-          </a>`;
+          `<a href="${newWebsite}"
+              target="_blank"
+              rel="noopener noreferrer">
+              ${newWebsite}
+           </a>`;
 
       } else {
 
@@ -396,29 +573,45 @@
 
       }
 
-      if (metadata.avatar) {
-        avatar.src = metadata.avatar;
+
+      if (newAvatar) {
+
+        avatar.src =
+          newAvatar;
+
+      } else {
+
+        avatar.src =
+          "https://via.placeholder.com/120";
+
       }
 
-      loadScriptCount(user.id);
+
+      message.textContent =
+        "✓ Creator profile saved successfully!";
+
     }
+  );
 
 
-    async function loadScriptCount(userId) {
+async function startProfile() {
 
-      const {
-        count,
-        error
-      } = await supabaseClient
-        .from("scripts")
-        .select("*", {
-          count: "exact",
-          head: true
-        })
-        .eq("user_id", userId);
+  await loadProfile();
 
-      if (!error) {
+  const {
+    data: { session }
+  } = await supabaseClient.auth.getSession();
 
-        document.getElementById(
-          "scriptCount"
-        ).textContent = count ||
+  if (session) {
+    await loadClipCount(session.user.id);
+  }
+
+}
+
+
+startProfile();
+
+</script>
+
+</body>
+</html>
