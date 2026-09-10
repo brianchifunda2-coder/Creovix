@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Clip Visionary - CREOVIX</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -161,11 +162,22 @@
       overflow: hidden;
     }
 
+    /* VIDEO PLAYER */
     .clip-video {
       width: 100%;
+      height: auto;
+      min-height: 220px;
+      max-height: 500px;
       display: block;
       background: #000;
-      max-height: 450px;
+      object-fit: contain;
+    }
+
+    .video-label {
+      padding: 10px 15px;
+      background: #080808;
+      color: #aaa;
+      font-size: 13px;
     }
 
     .clip-info {
@@ -217,6 +229,10 @@
       nav a {
         font-size: 14px;
       }
+
+      .clip-video {
+        min-height: 200px;
+      }
     }
   </style>
 </head>
@@ -236,15 +252,24 @@
   </nav>
 </header>
 
+
 <main>
 
   <section class="hero">
-    <h2>🎬 Clip Visionary</h2>
-    <p>Upload, discover and download free editing clips on CREOVIX.</p>
 
-    <div class="login-status" id="loginStatus">
+    <h2>🎬 Clip Visionary</h2>
+
+    <p>
+      Upload, discover and download free editing clips on CREOVIX.
+    </p>
+
+    <div
+      class="login-status"
+      id="loginStatus"
+    >
       Checking login...
     </div>
+
   </section>
 
 
@@ -259,17 +284,49 @@
     >
 
     <select id="clipCategory">
-      <option value="">Select category</option>
-      <option value="Music">Music</option>
-      <option value="Cinematic">Cinematic</option>
-      <option value="Action">Action</option>
-      <option value="Love">Love</option>
-      <option value="Nature">Nature</option>
-      <option value="Travel">Travel</option>
-      <option value="Sports">Sports</option>
-      <option value="Funny">Funny</option>
-      <option value="Other">Other</option>
+
+      <option value="">
+        Select category
+      </option>
+
+      <option value="Music">
+        Music
+      </option>
+
+      <option value="Cinematic">
+        Cinematic
+      </option>
+
+      <option value="Action">
+        Action
+      </option>
+
+      <option value="Love">
+        Love
+      </option>
+
+      <option value="Nature">
+        Nature
+      </option>
+
+      <option value="Travel">
+        Travel
+      </option>
+
+      <option value="Sports">
+        Sports
+      </option>
+
+      <option value="Funny">
+        Funny
+      </option>
+
+      <option value="Other">
+        Other
+      </option>
+
     </select>
+
 
     <input
       type="text"
@@ -277,31 +334,49 @@
       placeholder="Creator name"
     >
 
+
     <input
       type="file"
       id="clipFile"
       accept="video/*"
     >
 
+
     <button id="uploadButton">
       📤 Upload Clip
     </button>
 
-    <div id="status" class="status"></div>
 
-    <div id="loginWarning" class="login-warning"></div>
+    <div
+      id="status"
+      class="status"
+    ></div>
+
+
+    <div
+      id="loginWarning"
+      class="login-warning"
+    ></div>
 
   </section>
 
 
   <section>
 
-    <h2 class="library-title">🔥 Clip Library</h2>
+    <h2 class="library-title">
+      🔥 Clip Library
+    </h2>
 
-    <div id="clipsContainer" class="clips-container">
+
+    <div
+      id="clipsContainer"
+      class="clips-container"
+    >
+
       <div class="empty">
         Loading clips...
       </div>
+
     </div>
 
   </section>
@@ -319,8 +394,10 @@
   const SUPABASE_URL =
     "https://sxdfwbvjohzgfaatqxqk.supabase.co";
 
+
   const SUPABASE_KEY =
     "sb_publishable_Izxu9zWrYhf3rqEUDxInVQ_1qdGoJdQ";
+
 
   const supabaseClient =
     window.supabase.createClient(
@@ -335,14 +412,18 @@
   const loginStatus =
     document.getElementById("loginStatus");
 
+
   const loginWarning =
     document.getElementById("loginWarning");
+
 
   const uploadButton =
     document.getElementById("uploadButton");
 
+
   const status =
     document.getElementById("status");
+
 
   const clipsContainer =
     document.getElementById("clipsContainer");
@@ -353,7 +434,9 @@
     status.textContent = message;
 
     status.className =
-      "status " + type;
+      type
+        ? "status " + type
+        : "status";
 
   }
 
@@ -363,7 +446,8 @@
     const {
       data,
       error
-    } = await supabaseClient.auth.getSession();
+    } =
+      await supabaseClient.auth.getSession();
 
 
     if (error) {
@@ -378,9 +462,10 @@
     }
 
 
-    currentUser = data.session
-      ? data.session.user
-      : null;
+    currentUser =
+      data.session
+        ? data.session.user
+        : null;
 
 
     if (currentUser) {
@@ -393,12 +478,13 @@
 
       loginStatus.innerHTML =
         "✓ Logged in as <strong>" +
-        creator +
+        escapeHtml(creator) +
         "</strong>";
 
 
-      document.getElementById("creatorName").value =
-        creator;
+      document.getElementById(
+        "creatorName"
+      ).value = creator;
 
 
       loginWarning.textContent = "";
@@ -437,19 +523,29 @@
 
 
     const title =
-      document.getElementById("clipTitle").value.trim();
+      document
+        .getElementById("clipTitle")
+        .value
+        .trim();
 
 
     const category =
-      document.getElementById("clipCategory").value;
+      document.getElementById(
+        "clipCategory"
+      ).value;
 
 
     const creator =
-      document.getElementById("creatorName").value.trim();
+      document
+        .getElementById("creatorName")
+        .value
+        .trim();
 
 
     const file =
-      document.getElementById("clipFile").files[0];
+      document
+        .getElementById("clipFile")
+        .files[0];
 
 
     if (!title) {
@@ -515,7 +611,10 @@
 
     const safeName =
       file.name
-        .replace(/[^a-zA-Z0-9._-]/g, "-");
+        .replace(
+          /[^a-zA-Z0-9._-]/g,
+          "-"
+        );
 
 
     const filePath =
@@ -532,17 +631,18 @@
 
     const {
       error: uploadError
-    } = await supabaseClient.storage
-      .from("Clips")
-      .upload(
-        filePath,
-        file,
-        {
-          cacheControl: "3600",
-          upsert: false,
-          contentType: file.type
-        }
-      );
+    } =
+      await supabaseClient.storage
+        .from("Clips")
+        .upload(
+          filePath,
+          file,
+          {
+            cacheControl: "3600",
+            upsert: false,
+            contentType: file.type
+          }
+        );
 
 
     if (uploadError) {
@@ -562,29 +662,32 @@
 
     const {
       error: dbError
-    } = await supabaseClient
-      .from("clips")
-      .insert({
+    } =
+      await supabaseClient
+        .from("clips")
+        .insert({
 
-        title: title,
+          title: title,
 
-        category:
-          category || "General",
+          category:
+            category || "General",
 
-        creator_name:
-          creator || "CREOVIX Creator",
+          creator_name:
+            creator || "CREOVIX Creator",
 
-        file_path:
-          filePath
+          file_path:
+            filePath
 
-      });
+        });
 
 
     if (dbError) {
 
       await supabaseClient.storage
         .from("Clips")
-        .remove([filePath]);
+        .remove([
+          filePath
+        ]);
 
 
       showStatus(
@@ -606,11 +709,19 @@
     );
 
 
-    document.getElementById("clipTitle").value = "";
+    document.getElementById(
+      "clipTitle"
+    ).value = "";
 
-    document.getElementById("clipCategory").value = "";
 
-    document.getElementById("clipFile").value = "";
+    document.getElementById(
+      "clipCategory"
+    ).value = "";
+
+
+    document.getElementById(
+      "clipFile"
+    ).value = "";
 
 
     uploadButton.disabled = false;
@@ -630,24 +741,26 @@
     const {
       data,
       error
-    } = await supabaseClient
-      .from("clips")
-      .select(
-        "id, title, category, creator_name, file_path, created_at"
-      )
-      .order(
-        "created_at",
-        {
-          ascending: false
-        }
-      );
+    } =
+      await supabaseClient
+        .from("clips")
+        .select(
+          "id, title, category, creator_name, file_path, created_at"
+        )
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        );
 
 
     if (error) {
 
       clipsContainer.innerHTML =
-        '<div class="empty">❌ Unable to load clips.<br><br>' +
-        error.message +
+        '<div class="empty">' +
+        '❌ Unable to load clips.<br><br>' +
+        escapeHtml(error.message) +
         '</div>';
 
       return;
@@ -675,11 +788,16 @@
 
       const {
         data: publicData
-      } = supabaseClient.storage
-        .from("Clips")
-        .getPublicUrl(
-          clip.file_path
-        );
+      } =
+        supabaseClient.storage
+          .from("Clips")
+          .getPublicUrl(
+            clip.file_path
+          );
+
+
+      const videoUrl =
+        publicData.publicUrl;
 
 
       const card =
@@ -695,27 +813,29 @@
         <video
           class="clip-video"
           controls
-          preload="metadata"
           playsinline
+          preload="metadata"
+          src="${videoUrl}"
         >
-          <source
-            src="${publicData.publicUrl}"
-            type="video/mp4"
-          >
-
           Your browser does not support
           video playback.
-
         </video>
 
+        <div class="video-label">
+          ▶️ Watch this clip on CREOVIX
+        </div>
 
         <div class="clip-info">
 
-          <h3>🎥 ${escapeHtml(clip.title)}</h3>
+          <h3>
+            🎥 ${escapeHtml(clip.title)}
+          </h3>
 
           <p>
             <strong>Category:</strong>
-            ${escapeHtml(clip.category || "General")}
+            ${escapeHtml(
+              clip.category || "General"
+            )}
           </p>
 
           <p>
@@ -728,7 +848,7 @@
 
           <a
             class="download-btn"
-            href="${publicData.publicUrl}"
+            href="${videoUrl}"
             download
             target="_blank"
           >
@@ -750,11 +870,26 @@
   function escapeHtml(value) {
 
     return String(value)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+      .replace(
+        /</g,
+        "&lt;"
+      )
+      .replace(
+        />/g,
+        "&gt;"
+      )
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+      .replace(
+        /'/g,
+        "&#039;"
+      );
 
   }
 
