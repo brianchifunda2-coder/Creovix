@@ -236,8 +236,14 @@
       opacity: 0.8;
     }
 
+    .like-btn.liked {
+      background: #222;
+      border-color: #555;
+      color: #ff6b6b;
+    }
+
     .like-btn:disabled {
-      opacity: 0.6;
+      opacity: 0.7;
       cursor: not-allowed;
     }
 
@@ -508,6 +514,7 @@
 
   let currentUser = null;
   let allClips = [];
+  let likedClipIds = new Set();
 
 
   const loginStatus =
@@ -594,6 +601,8 @@
 
       uploadButton.disabled = false;
 
+      await loadUserLikes();
+
     } else {
 
       loginStatus.textContent =
@@ -604,7 +613,58 @@
 
       uploadButton.disabled = true;
 
+      likedClipIds =
+        new Set();
+
     }
+
+  }
+
+
+  async function loadUserLikes() {
+
+    if (!currentUser) {
+      likedClipIds = new Set();
+      return;
+    }
+
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("clip_likes")
+        .select("clip_id")
+        .eq(
+          "user_id",
+          currentUser.id
+        );
+
+
+    if (error) {
+
+      console.error(
+        "Unable to load user likes:",
+        error.message
+      );
+
+      likedClipIds =
+        new Set();
+
+      return;
+
+    }
+
+
+    likedClipIds =
+      new Set(
+        (data || []).map(
+          function(item) {
+            return item.clip_id;
+          }
+        )
+      );
 
   }
 
@@ -946,15 +1006,21 @@
       const {
         data: publicData
       } =
-        supabaseClient.storage
-          .from("Clips")
-          .getPublicUrl(
-            clip.file_path
-          );
+      supabaseClient.storage
+        .from("Clips")
+        .getPublicUrl(
+          clip.file_path
+        );
 
 
       const videoUrl =
         publicData.publicUrl;
+
+
+      const alreadyLiked =
+        likedClipIds.has(
+          clip.id
+        );
 
 
       const card =
@@ -1005,15 +1071,21 @@
 
           <div class="clip-stats">
 
-            <span>
+            <span class="view-count">
               👁️ ${Number(clip.views || 0)} views
             </span>
 
             <button
-              class="like-btn"
+              class="like-btn ${alreadyLiked ? "liked" : ""}"
               data-clip-id="${clip.id}"
+              ${alreadyLiked ? "disabled" : ""}
             >
-              ❤️ ${Number(clip.likes || 0)} likes
+              ${alreadyLiked
+                ? "❤️ Liked"
+                : "❤️ " +
+                  Number(clip.likes || 0) +
+                  " likes"
+              }
             </button>
 
           </div>
@@ -1033,7 +1105,9 @@
 
 
       const video =
-        card.querySelector(".clip-video");
+        card.querySelector(
+          ".clip-video"
+        );
 
 
       video.addEventListener(
@@ -1046,21 +1120,27 @@
 
 
       const likeButton =
-        card.querySelector(".like-btn");
+        card.querySelector(
+          ".like-btn"
+        );
 
 
       likeButton.addEventListener(
         "click",
         function() {
+
           likeClip(
             clip.id,
             likeButton
           );
+
         }
       );
 
 
-      clipsContainer.appendChild(card);
+      clipsContainer.appendChild(
+        card
+      );
 
     });
 
@@ -1092,11 +1172,21 @@
         .update({
           views: newViews
         })
-        .eq("id", clipId);
+        .eq(
+          "id",
+          clipId
+        );
 
 
     if (error) {
+
+      console.error(
+        "Unable to update views:",
+        error.message
+      );
+
       return;
+
     }
 
 
@@ -1105,22 +1195,16 @@
 
 
     const cards =
-      document.querySelectorAll(".clip-card");
+      document.querySelectorAll(
+        ".clip-card"
+      );
 
 
     cards.forEach(function(card) {
 
-      const button =
-        card.querySelector(".like-btn");
-
-
-      if (!button) {
-        return;
-      }
-
       const viewText =
         card.querySelector(
-          ".clip-stats span"
+          ".view-count"
         );
 
 
@@ -1154,7 +1238,82 @@
     }
 
 
+    if (
+      likedClipIds.has(
+        clipId
+      )
+    ) {
+
+      button.disabled = true;
+
+      button.textContent =
+        "❤️ Liked";
+
+      return;
+
+    }
+
+
     button.disabled = true;
+
+
+    const {
+      error: insertError
+    } =
+      await supabaseClient
+        .from("clip_likes")
+        .insert({
+
+          clip_id:
+            clipId,
+
+          user_id:
+            currentUser.id
+
+        });
+
+
+    if (insertError) {
+
+      if (
+        insertError.code === "23505"
+      ) {
+
+        likedClipIds.add(
+          clipId
+        );
+
+        button.classList.add(
+          "liked"
+        );
+
+        button.textContent =
+          "❤️ Liked";
+
+        button.disabled =
+          true;
+
+        return;
+
+      }
+
+
+      alert(
+        "Unable to like this clip: " +
+        insertError.message
+      );
+
+      button.disabled =
+        false;
+
+      return;
+
+    }
+
+
+    likedClipIds.add(
+      clipId
+    );
 
 
     const clip =
@@ -1165,7 +1324,11 @@
 
     if (!clip) {
 
-      button.disabled = false;
+      button.disabled =
+        true;
+
+      button.textContent =
+        "❤️ Liked";
 
       return;
 
@@ -1173,28 +1336,41 @@
 
 
     const newLikes =
-      Number(clip.likes || 0) + 1;
+      Number(
+        clip.likes || 0
+      ) + 1;
 
 
     const {
-      error
+      error: countError
     } =
       await supabaseClient
         .from("clips")
         .update({
           likes: newLikes
         })
-        .eq("id", clipId);
+        .eq(
+          "id",
+          clipId
+        );
 
 
-    if (error) {
+    if (countError) {
 
-      alert(
-        "Unable to like this clip: " +
-        error.message
+      console.error(
+        "Like saved, but count update failed:",
+        countError.message
       );
 
-      button.disabled = false;
+      button.classList.add(
+        "liked"
+      );
+
+      button.textContent =
+        "❤️ Liked";
+
+      button.disabled =
+        true;
 
       return;
 
@@ -1205,13 +1381,15 @@
       newLikes;
 
 
+    button.classList.add(
+      "liked"
+    );
+
     button.textContent =
-      "❤️ " +
-      newLikes +
-      " likes";
+      "❤️ Liked";
 
-
-    button.disabled = false;
+    button.disabled =
+      true;
 
   }
 
@@ -1261,9 +1439,16 @@
   );
 
 
-  checkLogin();
+  async function initializePage() {
 
-  loadClips();
+    await checkLogin();
+
+    await loadClips();
+
+  }
+
+
+  initializePage();
 
 </script>
 
