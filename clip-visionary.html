@@ -34,7 +34,7 @@
     nav {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 10px;
     }
 
     nav a {
@@ -42,6 +42,7 @@
       text-decoration: none;
       padding: 8px 10px;
       border-radius: 6px;
+      background: #111;
     }
 
     nav a:hover {
@@ -49,14 +50,15 @@
     }
 
     main {
+      width: 100%;
       max-width: 1000px;
       margin: auto;
-      padding: 30px 18px;
+      padding: 25px 15px 50px;
     }
 
     .hero {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
     }
 
     .hero h2 {
@@ -69,227 +71,184 @@
     }
 
     .login-status {
-      margin-top: 15px;
-      font-weight: bold;
+      background: #101010;
+      border: 1px solid #222;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 20px;
     }
 
-    .upload-card {
-      background: #111;
-      border: 1px solid #292929;
-      border-radius: 14px;
-      padding: 22px;
-      margin-bottom: 30px;
+    .box {
+      background: #0d0d0d;
+      border: 1px solid #222;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 25px;
     }
 
-    .upload-card h3 {
+    .box h3 {
       margin-top: 0;
     }
 
     input,
+    select,
+    button {
+      width: 100%;
+      padding: 13px;
+      margin-top: 10px;
+      border-radius: 7px;
+      border: 1px solid #333;
+      font-size: 15px;
+    }
+
+    input,
     select {
-      width: 100%;
-      padding: 13px;
-      margin: 8px 0 14px;
-      background: #080808;
+      background: #111;
       color: white;
-      border: 1px solid #444;
-      border-radius: 8px;
     }
 
-    input[type="file"] {
-      padding: 10px;
-    }
-
-    button,
-    .download-btn {
-      display: inline-block;
-      width: 100%;
-      padding: 13px;
-      border: none;
-      border-radius: 8px;
+    button {
       background: white;
       color: black;
       font-weight: bold;
-      text-align: center;
-      text-decoration: none;
       cursor: pointer;
-      margin-top: 5px;
     }
 
-    button:hover,
-    .download-btn:hover {
+    button:hover {
       opacity: 0.85;
     }
 
     button:disabled {
-      opacity: 0.5;
       cursor: not-allowed;
+      opacity: 0.5;
     }
 
-    .status {
-      margin-top: 15px;
-      padding: 12px;
-      border-radius: 8px;
-      display: none;
+    .message {
+      margin-top: 12px;
+      color: #aaa;
     }
 
-    .success {
-      display: block;
-      background: #123d1c;
-      color: #8cff9a;
-    }
-
-    .error {
-      display: block;
-      background: #421515;
-      color: #ff8c8c;
-    }
-
-    .library-tools {
+    .search-area {
       display: grid;
-      grid-template-columns: 1fr 220px;
-      gap: 12px;
-      margin-bottom: 22px;
-    }
-
-    .library-tools input,
-    .library-tools select {
-      margin: 0;
-    }
-
-    .library-title {
+      grid-template-columns: 1fr 200px;
+      gap: 10px;
       margin-bottom: 20px;
     }
 
-    .clips-container {
+    .clips {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
     }
 
     .clip-card {
-      background: #111;
-      border: 1px solid #292929;
-      border-radius: 14px;
+      background: #0d0d0d;
+      border: 1px solid #222;
+      border-radius: 12px;
       overflow: hidden;
     }
 
     .clip-video {
       width: 100%;
-      height: auto;
-      min-height: 220px;
-      max-height: 500px;
       display: block;
-      background: #000;
-      object-fit: contain;
-    }
-
-    .video-label {
-      padding: 10px 15px;
-      background: #080808;
-      color: #aaa;
-      font-size: 13px;
+      background: black;
+      max-height: 400px;
     }
 
     .clip-info {
-      padding: 16px;
+      padding: 15px;
     }
 
     .clip-info h3 {
-      margin: 0 0 10px;
-      font-size: 21px;
+      margin-top: 0;
+      margin-bottom: 10px;
+      word-break: break-word;
     }
 
     .clip-info p {
-      color: #bbb;
+      color: #aaa;
       margin: 7px 0;
     }
 
-    .clip-stats {
+    .stats {
       display: flex;
-      gap: 10px;
-      margin: 14px 0;
       flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
     }
 
-    .clip-stats span {
-      background: #080808;
-      border: 1px solid #292929;
-      padding: 8px 10px;
-      border-radius: 8px;
-      color: #aaa;
+    .stat {
+      background: #181818;
+      padding: 7px 10px;
+      border-radius: 20px;
+      font-size: 13px;
+      color: #ddd;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .actions button,
+    .actions a {
+      width: 100%;
+      padding: 11px;
+      border-radius: 7px;
+      text-align: center;
+      text-decoration: none;
+      font-weight: bold;
       font-size: 14px;
+      border: 1px solid #333;
+    }
+
+    .watch-btn {
+      background: #151515;
+      color: white;
+    }
+
+    .download-btn {
+      background: white;
+      color: black;
     }
 
     .like-btn {
-      width: auto;
-      margin: 0;
-      padding: 8px 10px;
-      background: #080808;
+      background: #151515;
       color: white;
-      border: 1px solid #292929;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    .like-btn:hover {
-      opacity: 0.8;
     }
 
     .like-btn.liked {
-      background: #222;
-      border-color: #555;
-      color: #ff6b6b;
-    }
-
-    .like-btn:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
+      background: #251010;
+      color: #ff7070;
+      border-color: #633;
     }
 
     .empty {
       text-align: center;
-      padding: 40px 20px;
-      background: #111;
-      border-radius: 14px;
-      color: #aaa;
-    }
-
-    .login-warning {
-      color: #ffcc66;
-      margin-top: 12px;
+      color: #888;
+      padding: 40px 10px;
     }
 
     footer {
       text-align: center;
-      color: #777;
-      padding: 35px 15px;
+      color: #666;
+      padding: 30px 10px;
+      border-top: 1px solid #222;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 650px) {
+      .search-area {
+        grid-template-columns: 1fr;
+      }
 
-      main {
-        padding: 22px 12px;
+      .actions {
+        grid-template-columns: 1fr;
       }
 
       .hero h2 {
-        font-size: 27px;
-      }
-
-      nav {
-        gap: 3px;
-      }
-
-      nav a {
-        font-size: 14px;
-      }
-
-      .clip-video {
-        min-height: 200px;
-      }
-
-      .library-tools {
-        grid-template-columns: 1fr;
+        font-size: 26px;
       }
     }
   </style>
@@ -298,8 +257,7 @@
 <body>
 
 <header>
-
-  <h1>CREOVIX</h1>
+  <h1>🎬 CREOVIX</h1>
 
   <nav>
     <a href="index.html">Home</a>
@@ -309,32 +267,20 @@
     <a href="movie-editing.html">Movie Editing</a>
     <a href="clip-visionary.html">Clip Visionary</a>
   </nav>
-
 </header>
-
 
 <main>
 
   <section class="hero">
-
     <h2>🎬 Clip Visionary</h2>
-
-    <p>
-      Upload, discover and download free editing clips on CREOVIX.
-    </p>
-
-    <div
-      class="login-status"
-      id="loginStatus"
-    >
-      Checking login...
-    </div>
-
+    <p>Upload, discover and download free editing clips on CREOVIX.</p>
   </section>
 
+  <div class="login-status" id="loginStatus">
+    Checking login...
+  </div>
 
-  <section class="upload-card">
-
+  <section class="box">
     <h3>📤 Upload a Clip</h3>
 
     <input
@@ -344,54 +290,17 @@
     >
 
     <select id="clipCategory">
-
-      <option value="">
-        Select category
-      </option>
-
-      <option value="Music">
-        Music
-      </option>
-
-      <option value="Cinematic">
-        Cinematic
-      </option>
-
-      <option value="Action">
-        Action
-      </option>
-
-      <option value="Love">
-        Love
-      </option>
-
-      <option value="Nature">
-        Nature
-      </option>
-
-      <option value="Travel">
-        Travel
-      </option>
-
-      <option value="Sports">
-        Sports
-      </option>
-
-      <option value="Funny">
-        Funny
-      </option>
-
-      <option value="Other">
-        Other
-      </option>
-
+      <option value="">Select category</option>
+      <option value="Music">Music</option>
+      <option value="Cinematic">Cinematic</option>
+      <option value="Action">Action</option>
+      <option value="Love">Love</option>
+      <option value="Nature">Nature</option>
+      <option value="Travel">Travel</option>
+      <option value="Sports">Sports</option>
+      <option value="Funny">Funny</option>
+      <option value="Other">Other</option>
     </select>
-
-    <input
-      type="text"
-      id="creatorName"
-      placeholder="Creator name"
-    >
 
     <input
       type="file"
@@ -399,105 +308,57 @@
       accept="video/*"
     >
 
-    <button id="uploadButton">
+    <button id="uploadButton" onclick="uploadClip()">
       📤 Upload Clip
     </button>
 
-    <div
-      id="status"
-      class="status"
-    ></div>
-
-    <div
-      id="loginWarning"
-      class="login-warning"
-    ></div>
-
+    <div class="message" id="uploadMessage"></div>
   </section>
 
+  <section class="box">
+    <h2>🔥 Clip Library</h2>
 
-  <section>
-
-    <h2 class="library-title">
-      🔥 Clip Library
-    </h2>
-
-    <div class="library-tools">
+    <div class="search-area">
 
       <input
         type="search"
-        id="searchClips"
-        placeholder="🔍 Search clips..."
+        id="searchInput"
+        placeholder="Search clips..."
+        oninput="renderClips()"
       >
 
-      <select id="filterCategory">
-
-        <option value="All">
-          All Categories
-        </option>
-
-        <option value="Music">
-          Music
-        </option>
-
-        <option value="Cinematic">
-          Cinematic
-        </option>
-
-        <option value="Action">
-          Action
-        </option>
-
-        <option value="Love">
-          Love
-        </option>
-
-        <option value="Nature">
-          Nature
-        </option>
-
-        <option value="Travel">
-          Travel
-        </option>
-
-        <option value="Sports">
-          Sports
-        </option>
-
-        <option value="Funny">
-          Funny
-        </option>
-
-        <option value="Other">
-          Other
-        </option>
-
+      <select
+        id="categoryFilter"
+        onchange="renderClips()"
+      >
+        <option value="All">All Categories</option>
+        <option value="Music">Music</option>
+        <option value="Cinematic">Cinematic</option>
+        <option value="Action">Action</option>
+        <option value="Love">Love</option>
+        <option value="Nature">Nature</option>
+        <option value="Travel">Travel</option>
+        <option value="Sports">Sports</option>
+        <option value="Funny">Funny</option>
+        <option value="Other">Other</option>
       </select>
 
     </div>
 
-    <div
-      id="clipsContainer"
-      class="clips-container"
-    >
-
-      <div class="empty">
-        Loading clips...
-      </div>
-
-    </div>
-
+    <div id="clips" class="clips"></div>
   </section>
 
 </main>
-
 
 <footer>
   © 2026 CREOVIX. All rights reserved.
 </footer>
 
-
 <script>
+
+  /* =========================================
+     SUPABASE
+  ========================================= */
 
   const SUPABASE_URL =
     "https://sxdfwbvjohzgfaatqxqk.supabase.co";
@@ -512,114 +373,66 @@
     );
 
 
+  /* =========================================
+     GLOBAL VARIABLES
+  ========================================= */
+
   let currentUser = null;
   let allClips = [];
   let likedClipIds = new Set();
 
 
-  const loginStatus =
-    document.getElementById("loginStatus");
-
-  const loginWarning =
-    document.getElementById("loginWarning");
-
-  const uploadButton =
-    document.getElementById("uploadButton");
-
-  const status =
-    document.getElementById("status");
-
-  const clipsContainer =
-    document.getElementById("clipsContainer");
-
-  const searchClips =
-    document.getElementById("searchClips");
-
-  const filterCategory =
-    document.getElementById("filterCategory");
-
-
-  function showStatus(message, type) {
-
-    status.textContent = message;
-
-    status.className =
-      type
-        ? "status " + type
-        : "status";
-
-  }
-
+  /* =========================================
+     CHECK LOGIN
+  ========================================= */
 
   async function checkLogin() {
 
     const {
       data,
       error
-    } =
-      await supabaseClient.auth.getSession();
-
+    } = await supabaseClient.auth.getSession();
 
     if (error) {
-
-      loginStatus.textContent =
-        "❌ Unable to check login.";
-
-      uploadButton.disabled = true;
-
+      console.error(error);
       return;
-
     }
 
+    currentUser = data.session
+      ? data.session.user
+      : null;
 
-    currentUser =
-      data.session
-        ? data.session.user
-        : null;
-
+    const status =
+      document.getElementById("loginStatus");
 
     if (currentUser) {
 
-      const creator =
+      const creatorName =
         currentUser.user_metadata?.creator_name ||
-        currentUser.email?.split("@")[0] ||
-        "CREOVIX Creator";
+        currentUser.email ||
+        "Creator";
 
-
-      loginStatus.innerHTML =
+      status.innerHTML =
         "✓ Logged in as <strong>" +
-        escapeHtml(creator) +
+        escapeHtml(creatorName) +
         "</strong>";
-
-
-      document.getElementById(
-        "creatorName"
-      ).value = creator;
-
-
-      loginWarning.textContent = "";
-
-      uploadButton.disabled = false;
 
       await loadUserLikes();
 
     } else {
 
-      loginStatus.textContent =
-        "⚠️ You are not logged in.";
-
-      loginWarning.innerHTML =
-        'Please <a href="login.html" style="color:white;">log in</a> to upload clips.';
-
-      uploadButton.disabled = true;
-
-      likedClipIds =
-        new Set();
+      status.innerHTML =
+        '⚠️ You are not logged in. <a href="login.html" style="color:white;">Log in</a> to upload and like clips.';
 
     }
 
+    await loadClips();
   }
 
+
+  /* =========================================
+     LOAD USER LIKES
+  ========================================= */
 
   async function loadUserLikes() {
 
@@ -628,599 +441,288 @@
       return;
     }
 
-
     const {
       data,
       error
-    } =
-      await supabaseClient
-        .from("clip_likes")
-        .select("clip_id")
-        .eq(
-          "user_id",
-          currentUser.id
-        );
-
+    } = await supabaseClient
+      .from("clip_likes")
+      .select("clip_id")
+      .eq("user_id", currentUser.id);
 
     if (error) {
 
       console.error(
-        "Unable to load user likes:",
+        "Unable to load likes:",
         error.message
       );
 
-      likedClipIds =
-        new Set();
-
+      likedClipIds = new Set();
       return;
-
     }
-
 
     likedClipIds =
       new Set(
         (data || []).map(
-          function(item) {
-            return item.clip_id;
-          }
+          item => item.clip_id
         )
       );
-
   }
 
 
-  async function uploadClip() {
-
-    if (!currentUser) {
-
-      showStatus(
-        "❌ Please log in before uploading.",
-        "error"
-      );
-
-      return;
-
-    }
-
-
-    const title =
-      document
-        .getElementById("clipTitle")
-        .value
-        .trim();
-
-
-    const category =
-      document.getElementById(
-        "clipCategory"
-      ).value;
-
-
-    const creator =
-      document
-        .getElementById("creatorName")
-        .value
-        .trim();
-
-
-    const file =
-      document
-        .getElementById("clipFile")
-        .files[0];
-
-
-    if (!title) {
-
-      showStatus(
-        "❌ Please enter a clip title.",
-        "error"
-      );
-
-      return;
-
-    }
-
-
-    if (!file) {
-
-      showStatus(
-        "❌ Please choose a video file.",
-        "error"
-      );
-
-      return;
-
-    }
-
-
-    if (!file.type.startsWith("video/")) {
-
-      showStatus(
-        "❌ Please select a video file.",
-        "error"
-      );
-
-      return;
-
-    }
-
-
-    const maxSize =
-      100 * 1024 * 1024;
-
-
-    if (file.size > maxSize) {
-
-      showStatus(
-        "❌ Video must be smaller than 100 MB.",
-        "error"
-      );
-
-      return;
-
-    }
-
-
-    uploadButton.disabled = true;
-
-
-    showStatus(
-      "⏳ Uploading your clip...",
-      ""
-    );
-
-
-    const safeName =
-      file.name.replace(
-        /[^a-zA-Z0-9._-]/g,
-        "-"
-      );
-
-
-    const filePath =
-      currentUser.id +
-      "/" +
-      Date.now() +
-      "-" +
-      Math.random()
-        .toString(36)
-        .substring(2, 12) +
-      "-" +
-      safeName;
-
-
-    const {
-      error: uploadError
-    } =
-      await supabaseClient.storage
-        .from("Clips")
-        .upload(
-          filePath,
-          file,
-          {
-            cacheControl: "3600",
-            upsert: false,
-            contentType: file.type
-          }
-        );
-
-
-    if (uploadError) {
-
-      showStatus(
-        "❌ Storage upload failed: " +
-        uploadError.message,
-        "error"
-      );
-
-      uploadButton.disabled = false;
-
-      return;
-
-    }
-
-
-    const {
-      error: dbError
-    } =
-      await supabaseClient
-        .from("clips")
-        .insert({
-
-          title: title,
-
-          category:
-            category || "General",
-
-          creator_name:
-            creator || "CREOVIX Creator",
-
-          file_path:
-            filePath
-
-        });
-
-
-    if (dbError) {
-
-      await supabaseClient.storage
-        .from("Clips")
-        .remove([
-          filePath
-        ]);
-
-
-      showStatus(
-        "❌ Database save failed: " +
-        dbError.message,
-        "error"
-      );
-
-      uploadButton.disabled = false;
-
-      return;
-
-    }
-
-
-    showStatus(
-      "✅ Clip uploaded successfully!",
-      "success"
-    );
-
-
-    document.getElementById(
-      "clipTitle"
-    ).value = "";
-
-    document.getElementById(
-      "clipCategory"
-    ).value = "";
-
-    document.getElementById(
-      "clipFile"
-    ).value = "";
-
-
-    uploadButton.disabled = false;
-
-
-    await loadClips();
-
-  }
-
+  /* =========================================
+     LOAD CLIPS
+  ========================================= */
 
   async function loadClips() {
-
-    clipsContainer.innerHTML =
-      '<div class="empty">Loading clips...</div>';
-
 
     const {
       data,
       error
-    } =
-      await supabaseClient
-        .from("clips")
-        .select(
-          "id, title, category, creator_name, file_path, created_at, views, likes"
-        )
-        .order(
-          "created_at",
-          {
-            ascending: false
-          }
-        );
-
+    } = await supabaseClient
+      .from("clips")
+      .select("*")
+      .order("created_at", {
+        ascending: false
+      });
 
     if (error) {
 
-      clipsContainer.innerHTML =
-        '<div class="empty">' +
-        '❌ Unable to load clips.<br><br>' +
-        escapeHtml(error.message) +
-        '</div>';
+      console.error(error);
+
+      document.getElementById("clips").innerHTML =
+        '<div class="empty">Unable to load clips.</div>';
 
       return;
-
     }
 
-
-    allClips =
-      data || [];
-
+    allClips = data || [];
 
     renderClips();
-
   }
 
 
+  /* =========================================
+     RENDER CLIPS
+  ========================================= */
+
   function renderClips() {
 
-    const search =
-      searchClips.value
-        .trim()
-        .toLowerCase();
+    const container =
+      document.getElementById("clips");
 
+    const search =
+      document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase()
+        .trim();
 
     const category =
-      filterCategory.value;
-
+      document
+        .getElementById("categoryFilter")
+        .value;
 
     const filtered =
-      allClips.filter(function(clip) {
+      allClips.filter(clip => {
 
         const title =
-          String(
-            clip.title || ""
-          ).toLowerCase();
-
+          (clip.title || "").toLowerCase();
 
         const creator =
-          String(
-            clip.creator_name || ""
-          ).toLowerCase();
-
+          (clip.creator_name || "").toLowerCase();
 
         const clipCategory =
-          clip.category ||
-          "General";
-
+          clip.category || "";
 
         const matchesSearch =
           !search ||
           title.includes(search) ||
           creator.includes(search);
 
-
         const matchesCategory =
           category === "All" ||
           clipCategory === category;
-
 
         return (
           matchesSearch &&
           matchesCategory
         );
-
       });
 
 
     if (filtered.length === 0) {
 
-      clipsContainer.innerHTML =
-        '<div class="empty">' +
-        '🔍 No clips found.' +
-        '</div>';
+      container.innerHTML =
+        '<div class="empty">No clips found.</div>';
 
       return;
-
     }
 
 
-    clipsContainer.innerHTML = "";
+    container.innerHTML =
+      filtered.map(clip => {
 
+        const alreadyLiked =
+          likedClipIds.has(clip.id);
 
-    filtered.forEach(function(clip) {
+        const videoUrl =
+          getClipUrl(clip.file_path);
 
-      const {
-        data: publicData
-      } =
-      supabaseClient.storage
-        .from("Clips")
-        .getPublicUrl(
-          clip.file_path
-        );
-
-
-      const videoUrl =
-        publicData.publicUrl;
-
-
-      const alreadyLiked =
-        likedClipIds.has(
-          clip.id
-        );
-
-
-      const card =
-        document.createElement("div");
-
-
-      card.className =
-        "clip-card";
-
-
-      card.innerHTML = `
-
-        <video
-          class="clip-video"
-          controls
-          playsinline
-          preload="metadata"
-          src="${videoUrl}"
-        >
-          Your browser does not support
-          video playback.
-        </video>
-
-        <div class="video-label">
-          ▶️ Watch this clip on CREOVIX
-        </div>
-
-        <div class="clip-info">
-
-          <h3>
-            🎥 ${escapeHtml(clip.title)}
-          </h3>
-
-          <p>
-            <strong>Category:</strong>
-            ${escapeHtml(
-              clip.category || "General"
-            )}
-          </p>
-
-          <p>
-            <strong>Creator:</strong>
-            ${escapeHtml(
-              clip.creator_name ||
-              "CREOVIX Creator"
-            )}
-          </p>
-
-          <div class="clip-stats">
-
-            <span class="view-count">
-              👁️ ${Number(clip.views || 0)} views
-            </span>
-
-            <button
-              class="like-btn ${alreadyLiked ? "liked" : ""}"
-              data-clip-id="${clip.id}"
-              ${alreadyLiked ? "disabled" : ""}
-            >
-              ${alreadyLiked
-                ? "❤️ Liked"
-                : "❤️ " +
-                  Number(clip.likes || 0) +
-                  " likes"
-              }
-            </button>
-
-          </div>
-
-          <a
-            class="download-btn"
-            href="${videoUrl}"
-            download
-            target="_blank"
-          >
-            ⬇️ Download Clip
-          </a>
-
-        </div>
-
-      `;
-
-
-      const video =
-        card.querySelector(
-          ".clip-video"
-        );
-
-
-      video.addEventListener(
-        "play",
-        function() {
-          addView(clip.id);
-        },
-        { once: true }
-      );
-
-
-      const likeButton =
-        card.querySelector(
-          ".like-btn"
-        );
-
-
-      likeButton.addEventListener(
-        "click",
-        function() {
-
-          likeClip(
-            clip.id,
-            likeButton
+        const creator =
+          escapeHtml(
+            clip.creator_name ||
+            "CREOVIX Creator"
           );
 
-        }
-      );
+        const title =
+          escapeHtml(
+            clip.title ||
+            "Untitled Clip"
+          );
+
+        const category =
+          escapeHtml(
+            clip.category ||
+            "Other"
+          );
+
+        const views =
+          Number(clip.views || 0);
+
+        const likes =
+          Number(clip.likes || 0);
 
 
-      clipsContainer.appendChild(
-        card
-      );
+        return `
+          <article class="clip-card">
 
-    });
+            <video
+              class="clip-video"
+              controls
+              preload="metadata"
+              playsinline
+              onclick="addView('${clip.id}', this)"
+            >
+              <source
+                src="${videoUrl}"
+                type="video/mp4"
+              >
+              Your browser does not support video playback.
+            </video>
 
+            <div class="clip-info">
+
+              <h3>🎥 ${title}</h3>
+
+              <p>
+                <strong>Category:</strong>
+                ${category}
+              </p>
+
+              <p>
+                <strong>Creator:</strong>
+                ${creator}
+              </p>
+
+              <div class="stats">
+
+                <span class="stat">
+                  👁️ ${views} views
+                </span>
+
+                <span class="stat">
+                  ❤️ ${likes} likes
+                </span>
+
+              </div>
+
+              <div class="actions">
+
+                <button
+                  class="watch-btn"
+                  onclick="watchClip('${videoUrl}')"
+                >
+                  ▶️ Watch this clip on CREOVIX
+                </button>
+
+                <button
+                  class="like-btn ${alreadyLiked ? "liked" : ""}"
+                  ${alreadyLiked ? "disabled" : ""}
+                  onclick="likeClip('${clip.id}', this)"
+                >
+                  ${alreadyLiked ? "❤️ Liked" : "❤️ " + likes + " likes"}
+                </button>
+
+                <a
+                  class="download-btn"
+                  href="${videoUrl}"
+                  download
+                  target="_blank"
+                >
+                  ⬇️ Download Clip
+                </a>
+
+              </div>
+
+            </div>
+
+          </article>
+        `;
+
+      }).join("");
   }
 
 
-  async function addView(clipId) {
+  /* =========================================
+     SECURE VIEW COUNTER
+  ========================================= */
 
-    const clip =
-      allClips.find(function(item) {
-        return item.id === clipId;
-      });
+  async function addView(clipId, videoElement) {
 
-
-    if (!clip) {
+    if (
+      videoElement.dataset.viewCounted === "true"
+    ) {
       return;
     }
 
-
-    const newViews =
-      Number(clip.views || 0) + 1;
-
+    videoElement.dataset.viewCounted = "true";
 
     const {
       error
-    } =
-      await supabaseClient
-        .from("clips")
-        .update({
-          views: newViews
-        })
-        .eq(
-          "id",
-          clipId
-        );
-
+    } = await supabaseClient.rpc(
+      "increment_clip_view",
+      {
+        p_clip_id: clipId
+      }
+    );
 
     if (error) {
 
       console.error(
-        "Unable to update views:",
+        "View counter error:",
         error.message
       );
 
       return;
-
     }
 
-
-    clip.views =
-      newViews;
-
-
-    const cards =
-      document.querySelectorAll(
-        ".clip-card"
+    const clip =
+      allClips.find(
+        item => item.id === clipId
       );
 
+    if (clip) {
+      clip.views =
+        Number(clip.views || 0) + 1;
 
-    cards.forEach(function(card) {
-
-      const viewText =
-        card.querySelector(
-          ".view-count"
-        );
-
-
-      if (viewText) {
-
-        viewText.textContent =
-          "👁️ " +
-          newViews +
-          " views";
-
-      }
-
-    });
-
+      renderClips();
+    }
   }
 
+
+  /* =========================================
+     SECURE LIKE
+  ========================================= */
 
   async function likeClip(
     clipId,
@@ -1234,221 +736,383 @@
       );
 
       return;
-
     }
 
 
-    if (
-      likedClipIds.has(
-        clipId
-      )
-    ) {
+    if (likedClipIds.has(clipId)) {
 
       button.disabled = true;
-
-      button.textContent =
-        "❤️ Liked";
+      button.textContent = "❤️ Liked";
 
       return;
-
     }
 
 
     button.disabled = true;
+    button.textContent = "❤️ Saving...";
 
 
     const {
-      error: insertError
-    } =
-      await supabaseClient
-        .from("clip_likes")
-        .insert({
-
-          clip_id:
-            clipId,
-
-          user_id:
-            currentUser.id
-
-        });
-
-
-    if (insertError) {
-
-      if (
-        insertError.code === "23505"
-      ) {
-
-        likedClipIds.add(
-          clipId
-        );
-
-        button.classList.add(
-          "liked"
-        );
-
-        button.textContent =
-          "❤️ Liked";
-
-        button.disabled =
-          true;
-
-        return;
-
+      error
+    } = await supabaseClient.rpc(
+      "add_clip_like",
+      {
+        p_clip_id: clipId
       }
+    );
 
+
+    if (error) {
+
+      console.error(
+        "Like error:",
+        error.message
+      );
 
       alert(
         "Unable to like this clip: " +
-        insertError.message
+        error.message
       );
 
-      button.disabled =
-        false;
+      button.disabled = false;
+
+      const clip =
+        allClips.find(
+          item => item.id === clipId
+        );
+
+      button.textContent =
+        "❤️ " +
+        Number(clip?.likes || 0) +
+        " likes";
 
       return;
-
     }
 
 
-    likedClipIds.add(
-      clipId
-    );
+    likedClipIds.add(clipId);
 
 
     const clip =
-      allClips.find(function(item) {
-        return item.id === clipId;
-      });
+      allClips.find(
+        item => item.id === clipId
+      );
 
 
-    if (!clip) {
+    if (clip) {
 
-      button.disabled =
-        true;
-
-      button.textContent =
-        "❤️ Liked";
-
-      return;
+      clip.likes =
+        Number(clip.likes || 0) + 1;
 
     }
 
 
-    const newLikes =
-      Number(
-        clip.likes || 0
-      ) + 1;
+    button.classList.add("liked");
+    button.textContent = "❤️ Liked";
+    button.disabled = true;
 
 
-    const {
-      error: countError
-    } =
-      await supabaseClient
-        .from("clips")
-        .update({
-          likes: newLikes
-        })
-        .eq(
-          "id",
-          clipId
+    renderClips();
+  }
+
+
+  /* =========================================
+     UPLOAD CLIP
+  ========================================= */
+
+  async function uploadClip() {
+
+    if (!currentUser) {
+
+      alert(
+        "Please log in before uploading a clip."
+      );
+
+      window.location.href =
+        "login.html";
+
+      return;
+    }
+
+
+    const title =
+      document
+        .getElementById("clipTitle")
+        .value
+        .trim();
+
+    const category =
+      document
+        .getElementById("clipCategory")
+        .value;
+
+    const file =
+      document
+        .getElementById("clipFile")
+        .files[0];
+
+    const button =
+      document.getElementById(
+        "uploadButton"
+      );
+
+    const message =
+      document.getElementById(
+        "uploadMessage"
+      );
+
+
+    if (!title) {
+
+      alert(
+        "Please enter a clip title."
+      );
+
+      return;
+    }
+
+
+    if (!category) {
+
+      alert(
+        "Please select a category."
+      );
+
+      return;
+    }
+
+
+    if (!file) {
+
+      alert(
+        "Please select a video file."
+      );
+
+      return;
+    }
+
+
+    if (!file.type.startsWith("video/")) {
+
+      alert(
+        "Please select a valid video file."
+      );
+
+      return;
+    }
+
+
+    const maxSize =
+      50 * 1024 * 1024;
+
+
+    if (file.size > maxSize) {
+
+      alert(
+        "The video is larger than 50 MB."
+      );
+
+      return;
+    }
+
+
+    button.disabled = true;
+    button.textContent =
+      "Uploading...";
+
+
+    message.textContent =
+      "Uploading your clip...";
+
+
+    try {
+
+      const safeName =
+        file.name
+          .replace(
+            /[^a-zA-Z0-9._-]/g,
+            "_"
+          );
+
+      const filePath =
+        currentUser.id +
+        "/" +
+        Date.now() +
+        "-" +
+        safeName;
+
+
+      const {
+        error: uploadError
+      } = await supabaseClient
+        .storage
+        .from("Clips")
+        .upload(
+          filePath,
+          file,
+          {
+            cacheControl: "3600",
+            upsert: false,
+            contentType: file.type
+          }
         );
 
 
-    if (countError) {
+      if (uploadError) {
+        throw uploadError;
+      }
 
-      console.error(
-        "Like saved, but count update failed:",
-        countError.message
-      );
 
-      button.classList.add(
-        "liked"
-      );
+      const {
+        data: publicData
+      } =
+        supabaseClient
+          .storage
+          .from("Clips")
+          .getPublicUrl(
+            filePath
+          );
 
+
+      const creatorName =
+        currentUser
+          .user_metadata
+          ?.creator_name ||
+        currentUser.email ||
+        "CREOVIX Creator";
+
+
+      const {
+        error: dbError
+      } = await supabaseClient
+        .from("clips")
+        .insert({
+          title: title,
+          category: category,
+          creator_name: creatorName,
+          file_path: filePath,
+          views: 0,
+          likes: 0
+        });
+
+
+      if (dbError) {
+
+        await supabaseClient
+          .storage
+          .from("Clips")
+          .remove([filePath]);
+
+        throw dbError;
+      }
+
+
+      message.textContent =
+        "✓ Clip uploaded successfully!";
+
+
+      document
+        .getElementById("clipTitle")
+        .value = "";
+
+      document
+        .getElementById("clipCategory")
+        .value = "";
+
+      document
+        .getElementById("clipFile")
+        .value = "";
+
+
+      await loadClips();
+
+    } catch (error) {
+
+      console.error(error);
+
+      message.textContent =
+        "Upload failed: " +
+        error.message;
+
+    } finally {
+
+      button.disabled = false;
       button.textContent =
-        "❤️ Liked";
-
-      button.disabled =
-        true;
-
-      return;
-
+        "📤 Upload Clip";
     }
-
-
-    clip.likes =
-      newLikes;
-
-
-    button.classList.add(
-      "liked"
-    );
-
-    button.textContent =
-      "❤️ Liked";
-
-    button.disabled =
-      true;
-
   }
 
+
+  /* =========================================
+     WATCH CLIP
+  ========================================= */
+
+  function watchClip(url) {
+
+    window.open(
+      url,
+      "_blank"
+    );
+  }
+
+
+  /* =========================================
+     STORAGE URL
+  ========================================= */
+
+  function getClipUrl(filePath) {
+
+    const {
+      data
+    } =
+      supabaseClient
+        .storage
+        .from("Clips")
+        .getPublicUrl(
+          filePath
+        );
+
+    return data.publicUrl;
+  }
+
+
+  /* =========================================
+     HTML ESCAPE
+  ========================================= */
 
   function escapeHtml(value) {
 
     return String(value)
-      .replace(
-        /&/g,
-        "&amp;"
-      )
-      .replace(
-        /</g,
-        "&lt;"
-      )
-      .replace(
-        />/g,
-        "&gt;"
-      )
-      .replace(
-        /"/g,
-        "&quot;"
-      )
-      .replace(
-        /'/g,
-        "&#039;"
-      );
-
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 
 
-  uploadButton.addEventListener(
-    "click",
-    uploadClip
+  /* =========================================
+     START
+  ========================================= */
+
+  checkLogin();
+
+
+  /* =========================================
+     AUTH STATE CHANGES
+  ========================================= */
+
+  supabaseClient.auth.onAuthStateChange(
+    async (event, session) => {
+
+      currentUser =
+        session
+          ? session.user
+          : null;
+
+      await checkLogin();
+    }
   );
-
-
-  searchClips.addEventListener(
-    "input",
-    renderClips
-  );
-
-
-  filterCategory.addEventListener(
-    "change",
-    renderClips
-  );
-
-
-  async function initializePage() {
-
-    await checkLogin();
-
-    await loadClips();
-
-  }
-
-
-  initializePage();
 
 </script>
 
