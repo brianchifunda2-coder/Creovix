@@ -78,7 +78,7 @@
       border: 1px solid #292929;
       border-radius: 14px;
       padding: 22px;
-      margin-bottom: 40px;
+      margin-bottom: 30px;
     }
 
     .upload-card h3 {
@@ -145,6 +145,18 @@
       color: #ff8c8c;
     }
 
+    .library-tools {
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .library-tools input,
+    .library-tools select {
+      margin: 0;
+    }
+
     .library-title {
       margin-bottom: 20px;
     }
@@ -162,7 +174,6 @@
       overflow: hidden;
     }
 
-    /* VIDEO PLAYER */
     .clip-video {
       width: 100%;
       height: auto;
@@ -194,6 +205,42 @@
       margin: 7px 0;
     }
 
+    .clip-stats {
+      display: flex;
+      gap: 10px;
+      margin: 14px 0;
+      flex-wrap: wrap;
+    }
+
+    .clip-stats span {
+      background: #080808;
+      border: 1px solid #292929;
+      padding: 8px 10px;
+      border-radius: 8px;
+      color: #aaa;
+      font-size: 14px;
+    }
+
+    .like-btn {
+      width: auto;
+      margin: 0;
+      padding: 8px 10px;
+      background: #080808;
+      color: white;
+      border: 1px solid #292929;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .like-btn:hover {
+      opacity: 0.8;
+    }
+
+    .like-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     .empty {
       text-align: center;
       padding: 40px 20px;
@@ -214,6 +261,7 @@
     }
 
     @media (max-width: 600px) {
+
       main {
         padding: 22px 12px;
       }
@@ -233,6 +281,10 @@
       .clip-video {
         min-height: 200px;
       }
+
+      .library-tools {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -240,6 +292,7 @@
 <body>
 
 <header>
+
   <h1>CREOVIX</h1>
 
   <nav>
@@ -250,6 +303,7 @@
     <a href="movie-editing.html">Movie Editing</a>
     <a href="clip-visionary.html">Clip Visionary</a>
   </nav>
+
 </header>
 
 
@@ -327,13 +381,11 @@
 
     </select>
 
-
     <input
       type="text"
       id="creatorName"
       placeholder="Creator name"
     >
-
 
     <input
       type="file"
@@ -341,17 +393,14 @@
       accept="video/*"
     >
 
-
     <button id="uploadButton">
       📤 Upload Clip
     </button>
-
 
     <div
       id="status"
       class="status"
     ></div>
-
 
     <div
       id="loginWarning"
@@ -367,6 +416,59 @@
       🔥 Clip Library
     </h2>
 
+    <div class="library-tools">
+
+      <input
+        type="search"
+        id="searchClips"
+        placeholder="🔍 Search clips..."
+      >
+
+      <select id="filterCategory">
+
+        <option value="All">
+          All Categories
+        </option>
+
+        <option value="Music">
+          Music
+        </option>
+
+        <option value="Cinematic">
+          Cinematic
+        </option>
+
+        <option value="Action">
+          Action
+        </option>
+
+        <option value="Love">
+          Love
+        </option>
+
+        <option value="Nature">
+          Nature
+        </option>
+
+        <option value="Travel">
+          Travel
+        </option>
+
+        <option value="Sports">
+          Sports
+        </option>
+
+        <option value="Funny">
+          Funny
+        </option>
+
+        <option value="Other">
+          Other
+        </option>
+
+      </select>
+
+    </div>
 
     <div
       id="clipsContainer"
@@ -394,10 +496,8 @@
   const SUPABASE_URL =
     "https://sxdfwbvjohzgfaatqxqk.supabase.co";
 
-
   const SUPABASE_KEY =
     "sb_publishable_Izxu9zWrYhf3rqEUDxInVQ_1qdGoJdQ";
-
 
   const supabaseClient =
     window.supabase.createClient(
@@ -407,26 +507,29 @@
 
 
   let currentUser = null;
+  let allClips = [];
 
 
   const loginStatus =
     document.getElementById("loginStatus");
 
-
   const loginWarning =
     document.getElementById("loginWarning");
-
 
   const uploadButton =
     document.getElementById("uploadButton");
 
-
   const status =
     document.getElementById("status");
 
-
   const clipsContainer =
     document.getElementById("clipsContainer");
+
+  const searchClips =
+    document.getElementById("searchClips");
+
+  const filterCategory =
+    document.getElementById("filterCategory");
 
 
   function showStatus(message, type) {
@@ -496,10 +599,8 @@
       loginStatus.textContent =
         "⚠️ You are not logged in.";
 
-
       loginWarning.innerHTML =
         'Please <a href="login.html" style="color:white;">log in</a> to upload clips.';
-
 
       uploadButton.disabled = true;
 
@@ -610,11 +711,10 @@
 
 
     const safeName =
-      file.name
-        .replace(
-          /[^a-zA-Z0-9._-]/g,
-          "-"
-        );
+      file.name.replace(
+        /[^a-zA-Z0-9._-]/g,
+        "-"
+      );
 
 
     const filePath =
@@ -713,11 +813,9 @@
       "clipTitle"
     ).value = "";
 
-
     document.getElementById(
       "clipCategory"
     ).value = "";
-
 
     document.getElementById(
       "clipFile"
@@ -745,7 +843,7 @@
       await supabaseClient
         .from("clips")
         .select(
-          "id, title, category, creator_name, file_path, created_at"
+          "id, title, category, creator_name, file_path, created_at, views, likes"
         )
         .order(
           "created_at",
@@ -768,12 +866,71 @@
     }
 
 
-    if (!data || data.length === 0) {
+    allClips =
+      data || [];
+
+
+    renderClips();
+
+  }
+
+
+  function renderClips() {
+
+    const search =
+      searchClips.value
+        .trim()
+        .toLowerCase();
+
+
+    const category =
+      filterCategory.value;
+
+
+    const filtered =
+      allClips.filter(function(clip) {
+
+        const title =
+          String(
+            clip.title || ""
+          ).toLowerCase();
+
+
+        const creator =
+          String(
+            clip.creator_name || ""
+          ).toLowerCase();
+
+
+        const clipCategory =
+          clip.category ||
+          "General";
+
+
+        const matchesSearch =
+          !search ||
+          title.includes(search) ||
+          creator.includes(search);
+
+
+        const matchesCategory =
+          category === "All" ||
+          clipCategory === category;
+
+
+        return (
+          matchesSearch &&
+          matchesCategory
+        );
+
+      });
+
+
+    if (filtered.length === 0) {
 
       clipsContainer.innerHTML =
         '<div class="empty">' +
-        '🎬 No clips yet<br><br>' +
-        'Be the first creator to upload a clip.' +
+        '🔍 No clips found.' +
         '</div>';
 
       return;
@@ -784,7 +941,7 @@
     clipsContainer.innerHTML = "";
 
 
-    data.forEach(function(clip) {
+    filtered.forEach(function(clip) {
 
       const {
         data: publicData
@@ -846,6 +1003,21 @@
             )}
           </p>
 
+          <div class="clip-stats">
+
+            <span>
+              👁️ ${Number(clip.views || 0)} views
+            </span>
+
+            <button
+              class="like-btn"
+              data-clip-id="${clip.id}"
+            >
+              ❤️ ${Number(clip.likes || 0)} likes
+            </button>
+
+          </div>
+
           <a
             class="download-btn"
             href="${videoUrl}"
@@ -860,9 +1032,186 @@
       `;
 
 
+      const video =
+        card.querySelector(".clip-video");
+
+
+      video.addEventListener(
+        "play",
+        function() {
+          addView(clip.id);
+        },
+        { once: true }
+      );
+
+
+      const likeButton =
+        card.querySelector(".like-btn");
+
+
+      likeButton.addEventListener(
+        "click",
+        function() {
+          likeClip(
+            clip.id,
+            likeButton
+          );
+        }
+      );
+
+
       clipsContainer.appendChild(card);
 
     });
+
+  }
+
+
+  async function addView(clipId) {
+
+    const clip =
+      allClips.find(function(item) {
+        return item.id === clipId;
+      });
+
+
+    if (!clip) {
+      return;
+    }
+
+
+    const newViews =
+      Number(clip.views || 0) + 1;
+
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from("clips")
+        .update({
+          views: newViews
+        })
+        .eq("id", clipId);
+
+
+    if (error) {
+      return;
+    }
+
+
+    clip.views =
+      newViews;
+
+
+    const cards =
+      document.querySelectorAll(".clip-card");
+
+
+    cards.forEach(function(card) {
+
+      const button =
+        card.querySelector(".like-btn");
+
+
+      if (!button) {
+        return;
+      }
+
+      const viewText =
+        card.querySelector(
+          ".clip-stats span"
+        );
+
+
+      if (viewText) {
+
+        viewText.textContent =
+          "👁️ " +
+          newViews +
+          " views";
+
+      }
+
+    });
+
+  }
+
+
+  async function likeClip(
+    clipId,
+    button
+  ) {
+
+    if (!currentUser) {
+
+      alert(
+        "Please log in to like clips."
+      );
+
+      return;
+
+    }
+
+
+    button.disabled = true;
+
+
+    const clip =
+      allClips.find(function(item) {
+        return item.id === clipId;
+      });
+
+
+    if (!clip) {
+
+      button.disabled = false;
+
+      return;
+
+    }
+
+
+    const newLikes =
+      Number(clip.likes || 0) + 1;
+
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from("clips")
+        .update({
+          likes: newLikes
+        })
+        .eq("id", clipId);
+
+
+    if (error) {
+
+      alert(
+        "Unable to like this clip: " +
+        error.message
+      );
+
+      button.disabled = false;
+
+      return;
+
+    }
+
+
+    clip.likes =
+      newLikes;
+
+
+    button.textContent =
+      "❤️ " +
+      newLikes +
+      " likes";
+
+
+    button.disabled = false;
 
   }
 
@@ -897,6 +1246,18 @@
   uploadButton.addEventListener(
     "click",
     uploadClip
+  );
+
+
+  searchClips.addEventListener(
+    "input",
+    renderClips
+  );
+
+
+  filterCategory.addEventListener(
+    "change",
+    renderClips
   );
 
 
